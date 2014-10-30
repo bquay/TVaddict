@@ -53,6 +53,7 @@ class MainPage(webapp2.RequestHandler):
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Sign Guestbook"></div>
           </form>
+		  <div>Hell World</div>
         </body>
       </html>""")
 
