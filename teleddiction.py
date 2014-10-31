@@ -38,7 +38,7 @@ class MainPage(webapp2.RequestHandler):
 		<link type="text/css" rel="stylesheet" href="stylesheets/default.css" />
     </head>
     <body>
-    <div is ="header">
+    <div id="header">
 	<div id="logo">
 		<h1>Teleddiction</h1>
 		<h2>By Group 3</h2>
@@ -47,10 +47,7 @@ class MainPage(webapp2.RequestHandler):
 		<ul>
 			<li><a href="#">Home</a></li>
 			<li><a href="#">About</a></li>
-			<li><a href="#">Hot Shows</a></li>
-			<li><a href="#">Comedy</a></li>
-			<li><a href="#">Forums</a></li>
-			<li><a href="#">Contact Us</a></li>
+			<li><a href="#">About</a></li>
 		</ul>
 	</div>
 	<img scr="images/img02.jpg">
@@ -76,8 +73,6 @@ class MainPage(webapp2.RequestHandler):
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Sign Guestbook"></div>
           </form>
-		  <div>brenden i .. figuered it out!</div>
-		  
         </body>
       </html>""")
 
