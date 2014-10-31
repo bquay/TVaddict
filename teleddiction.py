@@ -47,11 +47,11 @@ class MainPage(webapp2.RequestHandler):
 		<ul>
 			<li><a href="#">Home</a></li>
 			<li><a href="#">About</a></li>
-			<li><a href="#">About</a></li>
+			<li><a href="#">Search</a></li>
 		</ul>
 	</div>
-	<img src="images/img02.jpg">
-</div>""")
+</div>
+<div>""")
 
     greetings = ndb.gql('SELECT * '
                         'FROM Greeting '
@@ -68,11 +68,14 @@ class MainPage(webapp2.RequestHandler):
                               cgi.escape(greeting.content))
 
 
-    self.response.out.write("""
+    self.response.out.write("""</div><div>
           <form action="/sign" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Sign Guestbook"></div>
-          </form>
+          </form></div>
+		  <div id="footer">
+			<p id="legal">&copy;2014 Teleddiction. All Rights Reserved. Designed by Group 3</p>
+		  </div>
         </body>
       </html>""")
 
