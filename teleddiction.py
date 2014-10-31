@@ -50,7 +50,7 @@ class MainPage(webapp2.RequestHandler):
 			<li><a href="#">About</a></li>
 		</ul>
 	</div>
-	<img scr="images/img02.jpg">
+	<img src="images/img02.jpg">
 </div>""")
 
     greetings = ndb.gql('SELECT * '
