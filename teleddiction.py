@@ -31,7 +31,30 @@ class Greeting(ndb.Model):
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
-    self.response.out.write('<html><body>')
+    self.response.out.write("""<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Teleddiction</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/default.css" />
+    </head>
+    <body>
+    <div is ="header">
+	<div id="logo">
+		<h1>Teleddiction</h1>
+		<h2>By Group 3</h2>
+	</div>
+	<div id="menu">
+		<ul>
+			<li><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Hot Shows</a></li>
+			<li><a href="#">Comedy</a></li>
+			<li><a href="#">Forums</a></li>
+			<li><a href="#">Contact Us</a></li>
+		</ul>
+	</div>
+	<img scr="images/img02.jpg">
+</div>""")
 
     greetings = ndb.gql('SELECT * '
                         'FROM Greeting '
@@ -53,7 +76,8 @@ class MainPage(webapp2.RequestHandler):
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Sign Guestbook"></div>
           </form>
-		  <div>Hell World</div>
+		  <div>brenden i .. figuered it out!</div>
+		  
         </body>
       </html>""")
 
