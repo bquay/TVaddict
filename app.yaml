@@ -2,15 +2,16 @@ application: teleddiction
 version: 1
 runtime: python27
 api_version: 1
-threadsafe: yes
+threadsafe: true
 
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
 
-- url: /images
-  static_dir: images
-
+ - url: /getShows
+  script: teleddiction.app
+  login: admin
+  
 - url: /.*
   script: teleddiction.app
   

@@ -17,7 +17,8 @@
 import cgi
 import datetime
 import webapp2
-
+import urllib2
+from xml.etree import ElementTree
 from google.appengine.ext import ndb
 from google.appengine.api import users
 
@@ -91,8 +92,15 @@ class Guestbook(webapp2.RequestHandler):
     greeting.put()
     self.redirect('/')
 
-
+class GetShows(webapp2.Requesthandler):
+  def get(self):
+	url = 'http://services.tvrage.com/feeds/show_list.php'
+	u = urllib2.urlopen(url)
+	self.response.out.write(u)
+	
+	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
-  ('/sign', Guestbook)
+  ('/sign', Guestbook),
+  ('/getShows', GetShows)
 ], debug=True)
