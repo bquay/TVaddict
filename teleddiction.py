@@ -95,9 +95,16 @@ class Guestbook(webapp2.RequestHandler):
 class GetShows(webapp2.RequestHandler):
   def get(self):
 	url = 'http://services.tvrage.com/feeds/show_list.php'
-	u = urllib2.urlopen(url)
+	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+	u = urllib2.urlopen(request)
 	tree = ElementTree.parse(u)
-	self.response.out.write(tree)
+	rootElem = tree.getroot()
+	self.response.out.write("""<html><body><div>""")
+	for show in rootElem.findall('show'):
+		if( show.find('status').text == "3"):
+			id = show.find('id').text
+			self.response.out.write(id+"<br>")
+	self.response.out.write("""</div></body></html>""")
 	
 	
 app = webapp2.WSGIApplication([
