@@ -92,7 +92,7 @@ class Guestbook(webapp2.RequestHandler):
     greeting.put()
     self.redirect('/')
 
-class GetShows(webapp2.Requesthandler):
+class GetShows(webapp2.RequestHandler):
   def get(self):
 	url = 'http://services.tvrage.com/feeds/show_list.php'
 	u = urllib2.urlopen(url)
