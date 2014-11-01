@@ -96,7 +96,8 @@ class GetShows(webapp2.RequestHandler):
   def get(self):
 	url = 'http://services.tvrage.com/feeds/show_list.php'
 	u = urllib2.urlopen(url)
-	self.response.out.write(u)
+	tree = ElementTree.parse(u)
+	self.response.out.write(tree)
 	
 	
 app = webapp2.WSGIApplication([
