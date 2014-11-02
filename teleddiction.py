@@ -18,6 +18,7 @@ import cgi
 import datetime
 import webapp2
 import urllib2
+import os
 from xml.etree import ElementTree
 from google.appengine.ext import ndb
 from google.appengine.api import users
@@ -39,8 +40,8 @@ class MainPage(webapp2.RequestHandler):
   def get(self):
 	user = users.get_current_user()
     
-    login_url = ''
-    logout_url = ''
+	login_url = ''
+	logout_url = ''
 	name = ''
 	
 	if user:
@@ -50,65 +51,43 @@ class MainPage(webapp2.RequestHandler):
 		login_url = users.create_login_url('/')
 	
 	template_values = {
-            'login' : login_url,
-            'logout' : logout_url,
-            'nickname' : name
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name
 	}
 	
 	render_template(self, 'index.html', template_values)
 	
 class Comments(webapp2.RequestHandler):
   def get(self):
-    self.response.out.write("""<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>Teleddiction</title>
-		<link type="text/css" rel="stylesheet" href="stylesheets/default.css" />
-    </head>
-    <body>
-    <div id="header">
-	<div id="logo">
-		<h1>Teleddiction</h1>
-		<h2>By Group 3</h2>
-	</div>
-	<div id="menu">
-		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Search</a></li>
-		</ul>
-	</div>
-</div>
-<div>""")
-
-    greetings = ndb.gql('SELECT * '
-                        'FROM Greeting '
-                        'WHERE ANCESTOR IS :1 '
-                        'ORDER BY date DESC LIMIT 10',
-                        guestbook_key)
-
-    for greeting in greetings:
-      if greeting.author:
-        self.response.out.write('<b>%s</b> wrote:' % greeting.author.nickname())
-      else:
-        self.response.out.write('An anonymous person wrote:')
-      self.response.out.write('<blockquote>%s</blockquote>' %
-                              cgi.escape(greeting.content))
-
-
-    self.response.out.write("""</div><div>
-          <form action="/sign" method="post">
-            <div><textarea name="content" rows="3" cols="60"></textarea></div>
-            <div><input type="submit" value="Sign Guestbook"></div>
-          </form></div>
-		  <div id="footer">
-			<p id="legal">&copy;2014 Teleddiction. All Rights Reserved. Designed by Group 3</p>
-		  </div>
-        </body>
-      </html>""")
-
-
-class Guestbook(webapp2.RequestHandler):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/comments')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/comments')
+	
+	greetings = ndb.gql('SELECT * '
+						'FROM Greeting '
+						'WHERE ANCESTOR IS :1 '
+						'ORDER BY date DESC LIMIT 10',
+						guestbook_key)
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'comments' : greetings
+	}
+	
+	render_template(self, 'comments.html', template_values)
+	
+class Comment(webapp2.RequestHandler):
   def post(self):
     greeting = Greeting(parent=guestbook_key)
 
@@ -136,7 +115,7 @@ class GetShows(webapp2.RequestHandler):
 	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
-  ('/sign', Guestbook),
+  ('/comment', Comment),
   ('/comments', Comments),
   ('/getShows', GetShows)
 ], debug=True)
