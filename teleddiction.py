@@ -21,7 +21,13 @@ import urllib2
 from xml.etree import ElementTree
 from google.appengine.ext import ndb
 from google.appengine.api import users
+from google.appengine.ext.webapp import template
 
+def render_template(handler, templatename, templatevalues):
+    path = os.path.join(os.path.dirname(__file__), templatename)
+    html = template.render(path, templatevalues)
+    handler.response.out.write(html)
+	
 guestbook_key = ndb.Key('Guestbook', 'default_guestbook')
 
 class Greeting(ndb.Model):
@@ -29,8 +35,29 @@ class Greeting(ndb.Model):
   content = ndb.TextProperty()
   date = ndb.DateTimeProperty(auto_now_add=True)
 
-
 class MainPage(webapp2.RequestHandler):
+  def get(self):
+	user = users.get_current_user()
+    
+    login_url = ''
+    logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+            'login' : login_url,
+            'logout' : logout_url,
+            'nickname' : name
+	}
+	
+	render_template(self, 'index.html', template_values)
+	
+class Comments(webapp2.RequestHandler):
   def get(self):
     self.response.out.write("""<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -90,7 +117,7 @@ class Guestbook(webapp2.RequestHandler):
 
     greeting.content = self.request.get('content')
     greeting.put()
-    self.redirect('/')
+    self.redirect('/comments')
 
 class GetShows(webapp2.RequestHandler):
   def get(self):
@@ -110,5 +137,6 @@ class GetShows(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/sign', Guestbook),
+  ('/comments', Comments),
   ('/getShows', GetShows)
 ], debug=True)
