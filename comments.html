@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="scripts/funcs.js">//</script>
 <title>Teleddiction</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<script src="scripts/funcs.js">//</script>
 <link href="stylesheets/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -31,11 +31,9 @@
 		{% for comment in comments %}
 			<form action="/rate" method="post">
 				{% if logout %}
-					<input id="upvote" type="button" value="+" onclick="upvote(this.form);" />
+					<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
 					{{comment.rating}}
-					<input id="downvote" type="button" value="-" onclick="downvote(this.form);" />
-					<input type="hidden" name="updown" id="updown" />
-					<input type="hidden" name="comId" id="comId" value="{{comment.id}}" />
+					<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
 				{% else %}
 					{{comment.rating}}
 				{% endif %}
@@ -46,7 +44,9 @@
 				{% endif%}
 				<blockquote>{{comment.content}}</blockquote><div>{{comment.date}}</div>
 			</form><br>
-		{% endfor %}	
+		{% endfor %}
+		<input type="hidden" name="updown" id="updown"/>
+		<input type="hidden" name="comId" id="comId"/>
 	</div>
 	<div>
         <form action="/comment" method="post">
