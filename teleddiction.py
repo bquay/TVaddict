@@ -32,9 +32,13 @@ def render_template(handler, templatename, templatevalues):
 guestbook_key = ndb.Key('Guestbook', 'default_guestbook')
 
 class Greeting(ndb.Model):
+  id = ndb.IntegerProperty()
   author = ndb.UserProperty()
   content = ndb.TextProperty()
   date = ndb.DateTimeProperty(auto_now_add=True)
+  rating = ndb.IntegerProperty()
+  upvoted = ndb.UserProperty(repeated=True)
+  downvoted = ndb.UserProperty(repeated=True)
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
@@ -77,27 +81,52 @@ class Comments(webapp2.RequestHandler):
 						'WHERE ANCESTOR IS :1 '
 						'ORDER BY date DESC LIMIT 10',
 						guestbook_key)
-	
+						
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'comments' : greetings
+		'comments' : greetings,
 	}
 	
 	render_template(self, 'comments.html', template_values)
 	
 class Comment(webapp2.RequestHandler):
   def post(self):
-    greeting = Greeting(parent=guestbook_key)
+	greeting = Greeting(parent=guestbook_key)
 
-    if users.get_current_user():
-      greeting.author = users.get_current_user()
+	if users.get_current_user():
+		greeting.author = users.get_current_user()
+	
+	result = ndb.gql('SELECT * FROM Greeting')
+	number = result.count()
+	
+	greeting.id = number;
+	greeting.content = self.request.get('content')
+	greeting.rating = 0
+	greeting.put()
+	self.redirect('/comments')
 
-    greeting.content = self.request.get('content')
-    greeting.put()
-    self.redirect('/comments')
-
+class Rate(webapp2.RequestHandler):
+  def post(self):
+	self.redirect('/')
+	toVote = self.request.get('updown')
+	comId = self.request.get('comId')
+	
+	com_query = Greeting.query((Greeting.id == comId))
+	com = com_query.get()
+	
+	if( toVote == "1"):
+		com.rating = com.rating + 1;
+		com.upvoted.append(user)
+		com.downvoted.remove(user)
+	else:
+		com.rating = com.rating + -1;
+		com.downvoted.append(user)
+		com.upvoted.remove(user)
+		
+	com.put()
+	
 class GetShows(webapp2.RequestHandler):
   def get(self):
 	url = 'http://services.tvrage.com/feeds/show_list.php'
@@ -117,5 +146,6 @@ app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
   ('/comments', Comments),
+  ('/rate', Rate),
   ('/getShows', GetShows)
 ], debug=True)
