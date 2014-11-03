@@ -28,25 +28,25 @@
 </div>
 <div id="page">
 	<div id="content">
+		<form action="/rate" method="post">
 		{% for comment in comments %}
-			<form action="/rate" method="post">
-				{% if logout %}
-					<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
-					{{comment.rating}}
-					<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
-				{% else %}
-					{{comment.rating}}
-				{% endif %}
-				{% if comment.author %}
-					<b>{{comment.author.nickname}}</b> wrote:<br>
-				{% else %}
-					<b>An anonymous person</b> wrote:<br>
-				{% endif%}
-				<blockquote>{{comment.content}}</blockquote><div>{{comment.date}}</div>
-			</form><br>
+			{% if logout %}
+				<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+				{{comment.rating}}
+				<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
+			{% else %}
+				{{comment.rating}}
+			{% endif %}
+			{% if comment.author %}
+				<b>{{comment.author.nickname}}</b> wrote:<br>
+			{% else %}
+				<b>An anonymous person</b> wrote:<br>
+			{% endif%}
+			<blockquote>{{comment.content}}</blockquote><div>{{comment.date}}</div>
 		{% endfor %}
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
+		</form><br>
 	</div>
 	<div>
         <form action="/comment" method="post">
