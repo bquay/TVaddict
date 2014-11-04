@@ -154,8 +154,11 @@ hr {
 /* Comment */
 
 #comment{
-  border-radius: 5px 20px 5px;
-  background: #BADA55;
+  border-radius: 30px/10px;;
+  background: #C0C0C0;
+  border-style: solid;
+  border-color: #989898;
+  border-width: 3px;
 }
 
 /* Button */
