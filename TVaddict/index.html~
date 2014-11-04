@@ -9,11 +9,7 @@
 </head>
 <body>
 <div id="header">
-	<div id="logo">
-	<img src="stylesheets/images/Logo.png" alt="LOGO" />
-		<h1>Teleddiction</h1>
-		<h2>By Group 3</h2>
-	</div>
+	<img id="logo" src="stylesheets/images/Logo.png" alt="LOGO" />
 	<div id="menu">
 		<ul>
 			<li><a href="/">Home</a></li>

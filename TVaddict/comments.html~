@@ -10,10 +10,7 @@
 </head>
 <body>
 <div id="header">
-	<div id="logo">
-		<h1>Teleddiction</h1>
-		<h2>By Group 3</h2>
-	</div>
+	<img id="logo" src="stylesheets/images/Logo.png" alt="LOGO" />
 	<div id="menu">
 		<ul>
 			<li><a href="/">Home</a></li>
@@ -28,30 +25,35 @@
 </div>
 <div id="page">
 	<div id="content">
+		<div id="comment">
 		<form action="/rate" method="post">
 		{% for comment in comments %}
 			{% if logout %}
 				{% if comment.id in up %}
-					<input  type="button" id="upvote{{comment.id}}" value="+"/>
+					<input  type="submit" class="upvote" id="upvote{{comment.id}}" value="+"/>
 				{% else %}
-					<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+					<input  type="submit" class="upvote" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
 				{% endif %}
+				<div id="button"> 
 				{{comment.rating}}
 				{% if comment.id in down %}
-					<input type="button" id="downvote{{comment.id}}" value="-"/>
+					<input type="submit" class="downvote" id="downvote{{comment.id}}" value="-"/>
 				{% else %}
-					<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
+					<input type="submit" class="downvote" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
 				{% endif %}
+				</div>
 			{% else %}
 				{{comment.rating}}
 			{% endif %}
 			{% if comment.author %}
+			
 				<b>{{comment.author.nickname}}</b> wrote:<br>
 			{% else %}
 				<b>An anonymous person</b> wrote:<br>
 			{% endif%}
 			<blockquote>{{comment.content}}</blockquote><div>{{comment.date}}</div>
 		{% endfor %}
+			</div>
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
 		</form><br>
