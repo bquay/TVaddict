@@ -31,9 +31,17 @@
 		<form action="/rate" method="post">
 		{% for comment in comments %}
 			{% if logout %}
-				<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+				{% if comment.id in up %}
+					<input  type="button" id="upvote{{comment.id}}" value="+"/>
+				{% else %}
+					<input  type="button" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+				{% endif %}
 				{{comment.rating}}
-				<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
+				{% if comment.id in down %}
+					<input type="button" id="downvote{{comment.id}}" value="-"/>
+				{% else %}
+					<input type="button" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
+				{% endif %}
 			{% else %}
 				{{comment.rating}}
 			{% endif %}

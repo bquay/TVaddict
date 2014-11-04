@@ -69,6 +69,8 @@ class Comments(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	name = ''
+	up = []
+	down = []
 	
 	if user:
 		logout_url = users.create_logout_url('/comments')
@@ -81,12 +83,22 @@ class Comments(webapp2.RequestHandler):
 						'WHERE ANCESTOR IS :1 '
 						'ORDER BY date DESC LIMIT 10',
 						guestbook_key)
-						
+	if user:					
+		for greeting in greetings:
+			for upped in greeting.upvoted:
+				if user == upped:
+					up.append(greeting.id)
+			for downed in greeting.downvoted:
+				if user == downed:
+					down.append(greeting.id)
+		
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
 		'comments' : greetings,
+		'up' : up,
+		'down' : down
 	}
 	
 	render_template(self, 'comments.html', template_values)
@@ -109,9 +121,9 @@ class Comment(webapp2.RequestHandler):
 
 class Rate(webapp2.RequestHandler):
   def post(self):
-	self.redirect('/')
 	toVote = self.request.get('updown')
-	comId = self.request.get('comId')
+	comId = int(self.request.get('comId'))
+	user = users.get_current_user()
 	
 	com_query = Greeting.query((Greeting.id == comId))
 	com = com_query.get()
@@ -119,13 +131,20 @@ class Rate(webapp2.RequestHandler):
 	if( toVote == "1"):
 		com.rating = com.rating + 1;
 		com.upvoted.append(user)
-		com.downvoted.remove(user)
+		for downed in com.downvoted:
+			if user == downed:
+				com.downvoted.remove(user)
+				com.rating = com.rating + 1;
 	else:
-		com.rating = com.rating + -1;
+		com.rating = com.rating - 1;
 		com.downvoted.append(user)
-		com.upvoted.remove(user)
+		for upped in com.upvoted:
+			if user == upped:
+				com.upvoted.remove(user)
+				com.rating = com.rating - 1;
 		
 	com.put()
+	self.redirect('/comments')
 	
 class GetShows(webapp2.RequestHandler):
   def get(self):
