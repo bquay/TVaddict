@@ -158,14 +158,13 @@ hr {
   background: #C0C0C0;
   border-style: solid;
   border-color: #989898;
-  border-width: 60px;
+  border-width: 3px;
 }
 
 /* Button */
 
 #button{
 	border-radius: 5px 20px 5px;
-  	background: #BAFA59;
   	float: right;
 }
 
