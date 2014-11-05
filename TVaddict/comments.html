@@ -24,26 +24,24 @@
 	</div>
 </div>
 <div id="page">
-		<div id="comment">
 		<form action="/rate" method="post">
 		{% for comment in comments %}
-			{% if logout %}
-				{% if comment.id in up %}
-					<input  type="button" class="upvote" id="upvote{{comment.id}}" value="+"/>
+			<div class="comment">
+				{% if logout %}
+					{% if comment.id in up %}
+						<input  type="button" class="upvote" id="upvote{{comment.id}}" value="+"/>
+					{% else %}
+						<input  type="button" class="upvote" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+					{% endif %}
+					<div style="float:right">{{comment.rating}}</div>
+					{% if comment.id in down %}
+						<input type="button" class="downvote" id="downvote{{comment.id}}" value="-"/>
+					{% else %}
+						<input type="button" class="downvote" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
+					{% endif %}
 				{% else %}
-					<input  type="button" class="upvote" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
+					<div style="float:right">{{comment.rating}}</div>
 				{% endif %}
-				<div style="float:right">{{comment.rating}}</div>
-				<div id="personal_comment">
-				{% if comment.id in down %}
-					<input type="button" class="downvote" id="downvote{{comment.id}}" value="-"/>
-				{% else %}
-					<input type="button" class="downvote" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
-				{% endif %}
-				
-			{% else %}
-				<div style="float:right">{{comment.rating}}</div>
-			{% endif %}
 			{% if comment.author %}
 			
 				<b>{{comment.author.nickname}}</b> wrote:<br>
@@ -55,6 +53,7 @@
 			<br></br>
 		{% endfor %}
 			</div>
+		{% endfor %}	
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
 		</form><br>

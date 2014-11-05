@@ -164,7 +164,8 @@ hr {
    border-style: solid;
    border-color: #989898;
    border-width: 1px;
-   padding: 10px;
+   padding: 5px;
+   margin:3px;
 }
 
 .wordwrap { 

@@ -65,7 +65,7 @@ class Comments(webapp2.RequestHandler):
 	greetings = ndb.gql('SELECT * '
 						'FROM Greeting '
 						'WHERE ANCESTOR IS :1 '
-						'ORDER BY date DESC LIMIT 10',
+						'ORDER BY rating DESC LIMIT 10',
 						guestbook_key)
 	if user:					
 		for greeting in greetings:
