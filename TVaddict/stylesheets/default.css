@@ -146,32 +146,41 @@ hr {
 /* Page */
 
 #page {
-	width: 730px;
-	margin: 0 auto;
+   width: 50%;
+   margin: 0 auto;
 	padding: 30px 0;
 }
 
 /* Comment */
 
 #comment{
-  border-radius: 30px/10px;;
-  background: #C0C0C0;
-  border-style: solid;
-  border-color: #989898;
-  border-width: 3px;
+   border-radius: 30px/10px;
+   background: #C0C0C0;
+   border-style: solid;
+   border-color: #989898;
+   border-width: 1px;
+   padding: 3px;
+}
+
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */   
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
 }
 
 /* Button */
 
-#button{
-	border-radius: 5px 20px 5px;
-  	float: right;
-}
-
 .upvote {
-    background: url(images/thumbs_up.png) no-repeat 20px 20px;
+    background: url(images/thumbs_up.png) no-repeat;
     float: right;
     cursor: pointer;
+}
+.downvote{
+	background: url(images/thumbs_up.png) no-repeat;
+   float: right;
+   cursor: pointer
 }
 
 /* Content */
