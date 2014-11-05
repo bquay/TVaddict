@@ -17,3 +17,7 @@ function downvote(form, comId){
 	comInput.value = comId;
 	form.submit();
 }
+
+function disableClick(){
+	document.getElementById("submitId").disabled = true;
+}
