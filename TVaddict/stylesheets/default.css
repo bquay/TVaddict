@@ -153,13 +153,13 @@ hr {
 
 /* Comment */
 
-#comment{
-   border-radius: 30px/10px;
+.comment{
    background: #C0C0C0;
    border-style: solid;
    border-color: #989898;
    border-width: 1px;
-   padding: 3px;
+   padding: 5px;
+   margin:3px;
 }
 
 .wordwrap { 
