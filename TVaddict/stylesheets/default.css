@@ -155,11 +155,16 @@ hr {
 
 #comment{
    border-radius: 30px/10px;
+   padding: 3px;
+}
+
+#personal_comment{
+	border-radius: 30px/10px;
    background: #C0C0C0;
    border-style: solid;
    border-color: #989898;
    border-width: 1px;
-   padding: 3px;
+   padding: 10px;
 }
 
 .wordwrap { 
@@ -173,11 +178,13 @@ hr {
 /* Button */
 
 .upvote {
-    background: url(images/thumbs_up.png) no-repeat;
-    float: right;
-    cursor: pointer;
+	border:0;
+   background: url(images/thumbs_up.png) no-repeat;
+   float: right;
+   cursor: pointer;
 }
 .downvote{
+	border:0;	
 	background: url(images/thumbs_up.png) no-repeat;
    float: right;
    cursor: pointer

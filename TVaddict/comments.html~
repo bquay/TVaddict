@@ -34,11 +34,13 @@
 					<input  type="button" class="upvote" id="upvote{{comment.id}}" value="+" onClick="upvote(this.form, {{comment.id}});"/>
 				{% endif %}
 				<div style="float:right">{{comment.rating}}</div>
+				<div id="personal_comment">
 				{% if comment.id in down %}
 					<input type="button" class="downvote" id="downvote{{comment.id}}" value="-"/>
 				{% else %}
 					<input type="button" class="downvote" id="downvote{{comment.id}}" value="-" onClick="downvote(this.form, {{comment.id}});"/>
 				{% endif %}
+				
 			{% else %}
 				<div style="float:right">{{comment.rating}}</div>
 			{% endif %}
@@ -49,19 +51,19 @@
 				<b>An anonymous person</b> wrote:<br>
 			{% endif%}
 			<blockquote class="wordwrap">{{comment.content}}</blockquote><div>{{comment.date}}</div>
+			</div>		
 		{% endfor %}
 			</div>
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
 		</form><br>
 	<div>
-			<p> Add a comment </p>
+			<p> Add a comment below</p>
         <form action="/comment" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Comment"></div>
         </form>
 	</div>
-	<!-- end content -->
 	<div style="clear: both;">&nbsp;</div>
 </div>
 <!-- end page -->
