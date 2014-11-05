@@ -42,23 +42,19 @@
 				{% else %}
 					<div style="float:right">{{comment.rating}}</div>
 				{% endif %}
-			{% if comment.author %}
-			
-				<b>{{comment.author.nickname}}</b> wrote:<br>
-			{% else %}
-				<b>An anonymous person</b> wrote:<br>
-			{% endif%}
-			<blockquote class="wordwrap">{{comment.content}}</blockquote><div>{{comment.date}}</div>
-			</div>	
-			<br></br>
-		{% endfor %}
+				{% if comment.author %}
+					<b>{{comment.author.nickname}}</b> wrote:<br>
+				{% else %}
+					<b>An anonymous person</b> wrote:<br>
+				{% endif%}
+				<blockquote class="wordwrap">{{comment.content}}</blockquote><div>{{comment.date}}</div>
 			</div>
 		{% endfor %}	
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
-		</form><br>
+		</form>
 	<div>
-			<p> Add a comment below</p>
+		<p> Add a comment below</p>
         <form action="/comment" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Comment"></div>

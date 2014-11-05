@@ -1,4 +1,0 @@
-TVaddict
-========
-
-TVaddict/Teleddiction
