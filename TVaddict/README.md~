@@ -1,0 +1,27 @@
+Missing:
+
+Need to implement pages for, User Profile, TV shows list, Single Show, Episode view.
+
+User Profile:
+Optional, add --> Bio, age, gender. Favorite shows.
+Follow shows ability
+
+TV shows list:
+Fix voteing so cant vote on that comment at all, one voted.
+
+Single 
+view show webpage. (same as comment page?)
+
+edit profile? nessarary since we a re using the google login?
+
+Will,
+have to edit database stuff because we are now useing the google app engine to store all database info. 
+
+Will has stress test up and running.
+
+Agile programing? extra points? implement something easy, towards the end of the deadline.
+
+maybe one thing from the wish list?
+Freinds list, user rating? <-- probably the best. <-- agile programing.
+
+Search functionality:
