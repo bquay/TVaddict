@@ -46,6 +46,94 @@ class MainPage(webapp2.RequestHandler):
 	
 	render_template(self, 'index.html', template_values)
 	
+class SingleShowPage(webapp2.RequestHandler):
+  def get(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name
+	}
+	
+	render_template(self, 'show.html', template_values)
+	
+class UserProfile(webapp2.RequestHandler):
+  def get(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name
+	}
+	
+	render_template(self, 'profile.html', template_values)
+		
+class EpisodeView(webapp2.RequestHandler):
+  def get(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name
+	}
+	
+	render_template(self, 'episode.html', template_values)	
+		
+class ShowList(webapp2.RequestHandler):
+  def get(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name
+	}
+	
+	render_template(self, 'showlist.html', template_values)
+
 class Comments(webapp2.RequestHandler):
   def get(self):
 	user = users.get_current_user()
@@ -148,6 +236,10 @@ class GetShows(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
+  ('/show', SingleShowPage),
+  ('/profile',UserProfile),
+  ('/showlist', ShowList),
+  ('/episode', EpisodeView),
   ('/comments', Comments),
   ('/rate', Rate),
   ('/getShows', GetShows)
