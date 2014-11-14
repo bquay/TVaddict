@@ -15,6 +15,10 @@ handlers:
   script: teleddiction.app
   login: admin
   
+- url: /searchShow
+  script: teleddiction.app
+  login: admin  
+  
 - url: /.*
   script: teleddiction.app
   

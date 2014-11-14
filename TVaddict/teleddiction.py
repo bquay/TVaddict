@@ -15,6 +15,21 @@ def render_template(handler, templatename, templatevalues):
 	
 guestbook_key = ndb.Key('Guestbook', 'default_guestbook')
 
+class Message(ndb.Model):
+  userTo = ndb.UserProperty()
+  userFrom = ndb.UserProperty()
+  sentDate = ndb.DateTimeProperty(auto_now_add=True)
+  content = ndb.StringProperty()
+  
+class User(ndb.Model):
+  user = ndb.UserProperty()
+  shows = ndb.StringProperty(repeated=True)
+  bio = ndb.StringProperty()
+  name = ndb.StringProperty()
+  age = ndb.IntegerProperty()
+  gender = ndb.StringProperty()
+  messages = ndb.StructuredProperty(Message, repeated=True)
+  
 class Greeting(ndb.Model):
   id = ndb.IntegerProperty()
   author = ndb.UserProperty()
@@ -24,6 +39,23 @@ class Greeting(ndb.Model):
   upvoted = ndb.UserProperty(repeated=True)
   downvoted = ndb.UserProperty(repeated=True)
 
+class Episode(ndb.Model):
+  tvid = ndb.StringProperty()
+  epnumber = ndb.IntegerProperty()
+  date = ndb.StringProperty()
+  rating = ndb.IntegerProperty()
+  commentids = ndb.IntegerProperty(repeated=True)
+  
+class TVShow(ndb.Model):
+  id = ndb.StringProperty()
+  name = ndb.StringProperty()
+  imgsrc = ndb.StringProperty()
+  genre = ndb.StringProperty()
+  airtime = ndb.TimeProperty()
+  runtime = ndb.IntegerProperty()
+  rating = ndb.IntegerProperty()
+  tracking = ndb.IntegerProperty()
+  
 class MainPage(webapp2.RequestHandler):
   def get(self):
 	user = users.get_current_user()
@@ -119,6 +151,10 @@ class ShowList(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	name = ''
+	number = 0
+	
+	result = ndb.gql('SELECT * FROM TVShow')
+	number = result.count()
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -129,7 +165,8 @@ class ShowList(webapp2.RequestHandler):
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
-		'nickname' : name
+		'nickname' : name,
+		'number' : number
 	}
 	
 	render_template(self, 'showlist.html', template_values)
@@ -225,14 +262,56 @@ class GetShows(webapp2.RequestHandler):
 	u = urllib2.urlopen(request)
 	tree = ElementTree.parse(u)
 	rootElem = tree.getroot()
-	self.response.out.write("""<html><body><div>""")
+	
+	self.response.out.write("""<html><body>""")
+	
 	for show in rootElem.findall('show'):
-		if( show.find('status').text == "3"):
-			id = show.find('id').text
-			self.response.out.write(id+"<br>")
-	self.response.out.write("""</div></body></html>""")
+		if( show.find('status').text == "1"):
+			if(show.find('country').text == "US"):
+				id = show.find('id').text
+				tvshow_query = TVShow.query((TVShow.id == id))
+				show = tvshow_query.get()
+				if not show:
+					tvshow = TVShow()
+					tvshow.id = id
+					tvshow.put()
 	
+	u.close()
+	self.response.out.write("""</body></html>""")
 	
+class SearchShow(webapp2.RequestHandler):
+  def get(self):
+	tvshow_query = TVShow.query((TVShow.name == None))
+	shows = tvshow_query.fetch(limit=10)
+	for show in shows:
+		url = 'http://services.tvrage.com/feeds/full_show_info.php?sid=' + show.id
+		request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+		u = urllib2.urlopen(request)
+		tree = ElementTree.parse(u)
+		rootElem = tree.getroot()
+		
+		show.imgsrc = rootElem.find('image').text
+		show.genre = rootElem.find('classification').text
+		airtimeStr = rootElem.find('airtime').text
+		show.airtime = datetime.datetime.strptime(airtimeStr, "%H:%M")
+		show.runtime = int(rootElem.find('runtime').text)
+		show.rating = 0;
+		
+		episodes = rootElem.findall('episode')
+		for episode in episodes:
+			epi = Episode()
+			epi.tvid = show.id
+			epi.epnumber = int(episode.find('epnum').text)
+			dateStr = episode.find('airdate').text
+			epi.date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
+			epi.rating = 0
+			epi.put()
+		
+		show.name = rootElem.find('name').text
+		show.put()
+		
+		u.close()
+		
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -242,5 +321,6 @@ app = webapp2.WSGIApplication([
   ('/episode', EpisodeView),
   ('/comments', Comments),
   ('/rate', Rate),
-  ('/getShows', GetShows)
+  ('/getShows', GetShows),
+  ('/searchShow', SearchShow)
 ], debug=True)
