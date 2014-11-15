@@ -279,6 +279,29 @@ class GetShows(webapp2.RequestHandler):
 	u.close()
 	self.response.out.write("""</body></html>""")
 	
+  def post(self):
+	url = 'http://services.tvrage.com/feeds/show_list.php'
+	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+	u = urllib2.urlopen(request)
+	tree = ElementTree.parse(u)
+	rootElem = tree.getroot()
+		
+	self.response.out.write("""<html><body>""")
+		
+	for show in rootElem.findall('show'):
+		if( show.find('status').text == "1"):
+			if(show.find('country').text == "US"):
+				id = show.find('id').text
+				tvshow_query = TVShow.query((TVShow.id == id))
+				show = tvshow_query.get()
+				if not show:
+					tvshow = TVShow()
+					tvshow.id = id
+					tvshow.put()
+	
+	u.close()
+	self.response.out.write("""</body></html>""")
+	
 class SearchShow(webapp2.RequestHandler):
   def get(self):
 	tvshow_query = TVShow.query((TVShow.name == None))

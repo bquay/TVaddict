@@ -1,0 +1,4 @@
+cron:
+- description: weekly check for new shows
+  url: /getShows
+  schedule: every saturday 18:00
