@@ -151,10 +151,7 @@ class ShowList(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	name = ''
-	number = 0
-	
-	result = ndb.gql('SELECT * FROM TVShow')
-	number = result.count()
+	number = 2483
 	
 	if user:
 		logout_url = users.create_logout_url('/')
