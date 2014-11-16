@@ -320,12 +320,19 @@ class SearchShow(webapp2.RequestHandler):
 		episodes = rootElem.findall(".//episode")
 		for episode in episodes:
 			epi = Episode()
-			epi.tvid = show.id
-			epi.epnumber = int(episode.find('epnum').text)
-			dateStr = episode.find('airdate').text
-			epi.date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-			epi.rating = 0
-			epi.put()
+			try:
+				dateStr = episode.find('airdate').text
+				checkDate = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
+				epi_query = Episode.query((Episode.tvid == show.id),(Episode.date == checkDate))
+				epiResult = epi_query.get()
+				if not epiResult:
+					epi.epnumber = int(episode.find('epnum').text)
+					epi.tvid = show.id
+					epi.date = checkDate
+					epi.rating = 0
+					epi.put()
+			except AttributeError:
+				print "Delete TVShow with id=", show.id
 		
 		show.name = rootElem.find('name').text
 		show.put()
