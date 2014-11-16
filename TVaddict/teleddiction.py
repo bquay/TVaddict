@@ -318,7 +318,9 @@ class SearchShow(webapp2.RequestHandler):
 		show.rating = 0;
 		
 		episodes = rootElem.findall(".//episode")
-		for episode in episodes:
+		for i, episode in reversed(list(enumerate(episodes))):
+			if i == 200:
+				break
 			epi = Episode()
 			try:
 				dateStr = episode.find('airdate').text
