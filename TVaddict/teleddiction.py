@@ -318,8 +318,9 @@ class SearchShow(webapp2.RequestHandler):
 		show.rating = 0;
 		
 		episodes = rootElem.findall(".//episode")
-		for i, episode in reversed(list(enumerate(episodes))):
-			if i == 200:
+		i = 0
+		for episode in reversed(episodes):
+			if (i == 200):
 				break
 			epi = Episode()
 			try:
@@ -338,8 +339,8 @@ class SearchShow(webapp2.RequestHandler):
 		
 		show.name = rootElem.find('name').text
 		show.put()
-		
 		u.close()
+		i = i + 1;
 		
 app = webapp2.WSGIApplication([
   ('/', MainPage),
