@@ -42,7 +42,7 @@ class Greeting(ndb.Model):
 class Episode(ndb.Model):
   tvid = ndb.StringProperty()
   epnumber = ndb.IntegerProperty()
-  date = ndb.StringProperty()
+  date = ndb.DateTimeProperty()
   rating = ndb.IntegerProperty()
   commentids = ndb.IntegerProperty(repeated=True)
   
@@ -51,7 +51,7 @@ class TVShow(ndb.Model):
   name = ndb.StringProperty()
   imgsrc = ndb.StringProperty()
   genre = ndb.StringProperty()
-  airtime = ndb.TimeProperty()
+  airtime = ndb.DateTimeProperty()
   runtime = ndb.IntegerProperty()
   rating = ndb.IntegerProperty()
   tracking = ndb.IntegerProperty()
@@ -151,7 +151,7 @@ class ShowList(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	name = ''
-	number = 2483
+	number = 2484
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -317,7 +317,7 @@ class SearchShow(webapp2.RequestHandler):
 		show.runtime = int(rootElem.find('runtime').text)
 		show.rating = 0;
 		
-		episodes = rootElem.findall('episode')
+		episodes = rootElem.findall(".//episode")
 		for episode in episodes:
 			epi = Episode()
 			epi.tvid = show.id
