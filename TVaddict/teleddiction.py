@@ -7,6 +7,7 @@ from xml.etree import ElementTree
 from google.appengine.ext import ndb
 from google.appengine.api import users
 from google.appengine.ext.webapp import template
+from google.appengine.api import urlfetch
 
 def render_template(handler, templatename, templatevalues):
     path = os.path.join(os.path.dirname(__file__), templatename)
@@ -301,8 +302,9 @@ class GetShows(webapp2.RequestHandler):
 	
 class SearchShow(webapp2.RequestHandler):
   def get(self):
+	urlfetch.set_default_fetch_deadline(600)
 	tvshow_query = TVShow.query((TVShow.name == None))
-	shows = tvshow_query.fetch(limit=10)
+	shows = tvshow_query.fetch(limit=100)
 	for show in shows:
 		url = 'http://services.tvrage.com/feeds/full_show_info.php?sid=' + show.id
 		request = urllib2.Request(url, headers={"Accept" : "application/xml"})
@@ -310,11 +312,27 @@ class SearchShow(webapp2.RequestHandler):
 		tree = ElementTree.parse(u)
 		rootElem = tree.getroot()
 		
-		show.imgsrc = rootElem.find('image').text
-		show.genre = rootElem.find('classification').text
-		airtimeStr = rootElem.find('airtime').text
-		show.airtime = datetime.datetime.strptime(airtimeStr, "%H:%M")
-		show.runtime = int(rootElem.find('runtime').text)
+		try:
+			show.imgsrc = rootElem.find('image').text
+		except AttributeError:
+			show.imgsrc = "placeholder.png"
+		try:
+			show.genre = rootElem.find('classification').text
+		except AttributeError:
+			show.genre = "general"
+		try:
+			airtimeStr = rootElem.find('airtime').text
+		except AttributeError:
+			airtimeStr = "12:00"
+		try:
+			show.runtime = int(rootElem.find('runtime').text)
+		except AttributeError:
+			show.runtime = 30
+		try:
+			show.airtime = datetime.datetime.strptime(airtimeStr, "%H:%M")
+		except ValueError:
+			show.airtime = datetime.datetime.strptime("12:00", "%H:%M")
+		
 		show.rating = 0;
 		
 		episodes = rootElem.findall(".//episode")
@@ -322,25 +340,31 @@ class SearchShow(webapp2.RequestHandler):
 		for episode in reversed(episodes):
 			if (i == 200):
 				break
-			epi = Episode()
 			try:
 				dateStr = episode.find('airdate').text
-				checkDate = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
+				try:
+					checkDate = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
+				except ValueError:
+					continue
 				epi_query = Episode.query((Episode.tvid == show.id),(Episode.date == checkDate))
 				epiResult = epi_query.get()
 				if not epiResult:
-					epi.epnumber = int(episode.find('epnum').text)
+					epi = Episode()
+					try:
+						epi.epnumber = int(episode.find('epnum').text)
+					except AttributeError:
+						epi.epnumber = "0"
 					epi.tvid = show.id
 					epi.date = checkDate
 					epi.rating = 0
 					epi.put()
 			except AttributeError:
 				print "Delete TVShow with id=", show.id
-		
+			
+			i = i + 1;
 		show.name = rootElem.find('name').text
 		show.put()
 		u.close()
-		i = i + 1;
 		
 app = webapp2.WSGIApplication([
   ('/', MainPage),
