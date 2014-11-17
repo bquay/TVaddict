@@ -4,4 +4,4 @@ cron:
   schedule: every saturday 18:00
 - description: daily update for episodes
   url: /searchShow
-  schedule: every day 00:30
+  schedule: every day 01:10

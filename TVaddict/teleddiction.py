@@ -353,7 +353,7 @@ class SearchShow(webapp2.RequestHandler):
 					try:
 						epi.epnumber = int(episode.find('epnum').text)
 					except AttributeError:
-						epi.epnumber = "0"
+						epi.epnumber = 0
 					epi.tvid = show.id
 					epi.date = checkDate
 					epi.rating = 0
