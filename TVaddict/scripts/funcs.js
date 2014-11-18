@@ -21,3 +21,9 @@ function downvote(form, comId){
 function disableClick(){
 	document.getElementById("submitId").disabled = true;
 }
+
+function selectShow(form, name){
+	var TvName = document.getElementById('searchbar');
+	TvName.value = name;
+	form.submit();
+}

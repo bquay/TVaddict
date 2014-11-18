@@ -153,6 +153,7 @@ class ShowList(webapp2.RequestHandler):
 	logout_url = ''
 	name = ''
 	shows = ''
+	num = ''	
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -166,7 +167,8 @@ class ShowList(webapp2.RequestHandler):
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'shows' : shows
+		'shows' : shows,
+		'0' : num
 	}
 	
 	render_template(self, 'showlist.html', template_values)
@@ -342,7 +344,7 @@ class SearchShow(webapp2.RequestHandler):
 		try:
 			show.imgsrc = rootElem.find('image').text
 		except AttributeError:
-			show.imgsrc = "placeholder.png"
+			show.imgsrc = "/stylesheets/images/placeholder.png"
 		try:
 			show.genre = rootElem.find('classification').text
 		except AttributeError:
