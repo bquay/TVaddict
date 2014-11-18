@@ -32,8 +32,9 @@
 	</div>
 </div>
 <div id="page">
-	<p> Add Show list content here.</p>
-	<div>{{number}} : Shows in the DB</div>
+	{% for show in shows %}
+		<div>{{show.name}}</div>
+	{% endfor %}
 </div>
 <!-- end page -->
 <div id="footer">

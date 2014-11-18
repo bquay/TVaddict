@@ -152,7 +152,7 @@ class ShowList(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	name = ''
-	number = 2484
+	shows = ''
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -160,11 +160,40 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
+	show_query = TVShow.query((TVShow.name != None))
+	shows = show_query.get()
+	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'number' : number
+		'shows' : shows
+	}
+	
+	render_template(self, 'showlist.html', template_values)
+	
+  def post(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	shows =''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	show_query = TVShow.query((TVShow.name != None))
+	shows = show_query.get()
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'shows' : shows
 	}
 	
 	render_template(self, 'showlist.html', template_values)
