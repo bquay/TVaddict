@@ -150,7 +150,7 @@ hr {
 /* search bar */
 #searchBar{
 		background-color:#c3dfef;
-		float:right;
+		float:left
 	}
 #search{
 	float:right;
@@ -492,10 +492,9 @@ hr {
 /* Footer */
 
 #footer {
-   bottom:0;
    width: 100%;
-	height: 30px;
-	padding: 20px;
+	height: 50px;
+	padding: 1px;
 	background: #5F919E;
 	border-top: 5px solid #4C747E;
 }
