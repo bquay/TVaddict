@@ -160,8 +160,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	show_query = TVShow.query((TVShow.name != None))
-	shows = show_query.get()
+	shows = TVShow.query(TVShow.name != None)
 	
 	template_values = {
 		'login' : login_url,
@@ -186,8 +185,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	show_query = TVShow.query((TVShow.name != None))
-	shows = show_query.get()
+	shows = TVShow.query(TVShow.name != None)
 	
 	template_values = {
 		'login' : login_url,
