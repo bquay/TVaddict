@@ -201,6 +201,20 @@ hr {
 	padding: 30px 0;
 }
 
+#singleshow{
+	margin: 0 auto;
+	border-radius: 10px/10px;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+	text-align: center;
+	text-transform: capitalize;
+	padding: 5px;
+	font-size: 20px;
+	align-content: center;
+	background: #282828;
+   border-style: solid;
+   border-color: #989898;
+   border-width: 1px;
+}
 
 /* Showlist */
 
@@ -213,9 +227,15 @@ hr {
    padding: 5px;
    margin:3px;
 }
+.ShowTableSingle{
+	border-radius: 10px/10px;
+   background: #282828 ;
+   padding: 5px;
+   margin:3px;
+}
 .showTable{
 	border-radius: 10px/10px;
-   background: #C0C0C0;
+   background: #282828 ;
    border-style: solid;
    border-color: ##404040;
    border-width: 1px;
@@ -231,6 +251,34 @@ hr {
 }
 #showImg{
 	height: 100%;
+	align-content: left;
+}
+
+.trackbutton {
+	margin: 0;
+	padding: 5px 15px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:14px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	color: #ffffff;
+	border: solid 1px #0076a3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	border-radius: 5px 5px;
+	}
+.trackbutton:hover {
+	text-decoration: none;
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	}
+/* Fixes submit button height problem in Firefox */
+.trackbutton::-moz-focus-inner {
+  border: 0;
 }
 
 
@@ -383,6 +431,31 @@ hr {
 
 .boxed ul li.first {
 	border: none;
+}
+/* Track */
+
+#track {
+}
+
+#track form {
+	margin: 0;
+	padding: 0;
+}
+
+#track fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#track p {
+	float: left;
+	padding-top: 5px;
+	font-size: 85%;
+}
+
+#tracksubmit {
+	float: right;
 }
 
 /* Search */

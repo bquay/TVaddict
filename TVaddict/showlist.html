@@ -20,7 +20,6 @@
 				<li><a href="/profile">My Profile</a></li>
 			{% endif %}
 			<li><a href="/comments">Comments</a></li>
-			<li><a href="/show">SingleShowView</a></li>
 			<li><a href="/episode">Episode View</a></li>
 			<li id="seachBar">
 				<form id="search" method="post" action="/search">
@@ -44,7 +43,7 @@
 				<div id="displayShow" onclick="selectShow(this.form, {{show.name}});"><img id="showImg" src={{show.imgsrc}} alt={{show.imgsrc}} height="200" width="200"></div>
 				<div id="showName">{{show.name}}</div>
 			<td>
-		{% if forloop.counter0 == 50 %}	1
+		{% if forloop.counter0 == 50 %}
 		<br />
 		{% endif %}
 	{% endfor %}
