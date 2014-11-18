@@ -23,8 +23,8 @@
 			<li><a href="/episode">Episode View</a></li>
 			<li><a href="/showlist">Show List</a></li>
 			<li id="seachBar">
-				<form id="search" method="get" action="http://www.google.com">
-					<input type="text" class="textinput"  size="25" maxlength="30">
+				<form id="search" method="post" action="/search">
+					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50">
 		        <input type="submit" value="search" class="button">
 				</form>
 			</li>
@@ -32,7 +32,13 @@
 	</div>
 </div>
 <div id="page">
-	<p> Add Single Show View content here.</p>
+	{% if show %}
+		<div>{{show.name}}</div>
+		<div>{{show.id}}</div>
+		<div>{{show.rating}}</div>
+	{% else %}
+		<div>No such show in our database.</div>
+	{% endif %}
 </div>
 <!-- end page -->
 <div id="footer">

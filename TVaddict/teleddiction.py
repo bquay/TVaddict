@@ -365,7 +365,38 @@ class SearchShow(webapp2.RequestHandler):
 		show.name = rootElem.find('name').text
 		show.put()
 		u.close()
+
+class Search(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
 		
+  def post(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	show = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	search = self.request.get('searchbar')
+	show_query = TVShow.query((TVShow.name == search))
+	show = show_query.get()
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'show' : show
+	}
+	
+	render_template(self, 'show.html', template_values)
+	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -376,5 +407,6 @@ app = webapp2.WSGIApplication([
   ('/comments', Comments),
   ('/rate', Rate),
   ('/getShows', GetShows),
-  ('/searchShow', SearchShow)
+  ('/searchShow', SearchShow),
+  ('/search', Search)
 ], debug=True)
