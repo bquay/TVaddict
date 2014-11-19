@@ -23,7 +23,7 @@ function disableClick(){
 }
 
 function selectShow(form, name){
-	var TvName = document.getElementById('searchbar');
+	var TvName = document.getElementById('showselectID');
 	TvName.value = name;
 	form.submit();
 }

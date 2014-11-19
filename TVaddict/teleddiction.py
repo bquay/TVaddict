@@ -84,11 +84,23 @@ class MainPage(webapp2.RequestHandler):
 	
 class SingleShowPage(webapp2.RequestHandler):
   def get(self):
+	self.redirect('/')
+	
+  def post(self):
 	user = users.get_current_user()
     
 	login_url = ''
 	logout_url = ''
 	name = ''
+	show = ''
+	episodes = ''
+	
+	showname = self.request.get('showselect')
+	show_query = TVShow.query((TVShow.name == showname))
+	show = show_query.get()
+	
+	eps_query = Episode.query(Episode.tvid == show.id)
+	episodes = eps_query.get()
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -99,7 +111,9 @@ class SingleShowPage(webapp2.RequestHandler):
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
-		'nickname' : name
+		'nickname' : name,
+		'show' : show,
+		'episodes' : episodes
 	}
 	
 	render_template(self, 'show.html', template_values)
@@ -425,7 +439,7 @@ class Search(webapp2.RequestHandler):
 		'show' : show
 	}
 	
-	render_template(self, 'show.html', template_values)
+	render_template(self, 'searchresults.html', template_values)
 	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
@@ -438,5 +452,5 @@ app = webapp2.WSGIApplication([
   ('/rate', Rate),
   ('/getShows', GetShows),
   ('/searchShow', SearchShow),
-  ('/search', Search)
+  ('/search', Search),
 ], debug=True)
