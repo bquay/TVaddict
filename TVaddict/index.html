@@ -32,24 +32,55 @@
 		</ul>
 	</div>
 </div>
-<div id="page">	
-	<div id="content">
-		<div style="margin-bottom: 20px;">
+<div>	
+	<div>
+		<div id="page">
 			{% if login %}
 				<h1 class="title">Welcome to Teleddiction!</h1>
 			{% else %}
 				<h1 class="title">Welcome {{nickname}}!</h1>
 			{% endif %}
 			<p><strong>Teleddiction</strong> is your home for all thinks TV!!! You're free to use it for both commercial or personal use. I only ask that you don't abuse this new found power!. Anyway <em>Enjoy :)</em></p>
-			<h2>Documentary</h2>
+		</div>
+		<div class ="threecols">
+			<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px">
+			<h2 class="title">Documentary</h2>
+			<tr>
 			{% for show in shows %}
 				{% if show.genre == "Documentary" %}
-					<p>This show {{show.genre}}</p>
+					<td class="showTable"><div class = "col1"><p>This show {{show.genre}}</p></div></td>
 				{% endif %}
 			{% endfor %}
+			</tr>
+			</table>
+			<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px">
+			<tr>
+			<h2 class="title">Sports</h2>
+			{% for show in shows %}
+				{% if show.genre == "Sports" %}
+					<td class="showTable"><div class = "col2"><p>This show {{show.genre}}</p></div></td>
+				{% endif %}
+			{% endfor %}
+			</tr>
+			</table>
+			<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px">
+			<tr>			
+			<h2 class="title">Reality</h2>
+			{% for show in shows|slice:":5" %}
+				{% if show.genre == "Reality" %}
+				<td class="showTable"><div class = "col3">
+						<p> {{show.genre}} </p>
+					{% if ifloop.counter0 >= 5%}
+						<p> {{ifloop.counter0}} </p>
+					{% endif %}
+					</td>	
+				{% endif %}		
+			{% endfor %}
+			</tr>			
+			</table>
 		</div>
-	</div>
 	<!-- end content -->
+	</div>
 </div>
 <!-- end page -->
 <div id="footer">
