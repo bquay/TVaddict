@@ -223,7 +223,6 @@ hr {
 	border-radius: 10px/10px;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;	
 	text-align: center;
-	text-transform: capitalize;
 	padding: 5px;
 	font-size: 20px;
 	align-content: center;
@@ -262,7 +261,6 @@ hr {
 #showName{
 	font-family: "Trebuchet MS", Helvetica, sans-serif;	
 	text-align: center;
-	text-transform: capitalize;
 	padding: 5px;
 	font-size: 20px;
 }

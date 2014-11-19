@@ -82,9 +82,63 @@ class MainPage(webapp2.RequestHandler):
 	
 	render_template(self, 'index.html', template_values)
 	
+  def post(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	shows = TVShow.query(TVShow.name != None)	
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'shows' : shows
+	}
+	
+	render_template(self, 'index.html', template_values)
+	
 class SingleShowPage(webapp2.RequestHandler):
   def get(self):
-	self.redirect('/')
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	show = ''
+	episodes = ''
+	
+	showid = self.request.get('showselect')
+	show_query = TVShow.query((TVShow.id == showid))
+	show = show_query.get()
+	
+	if show:
+		eps_query = Episode.query(Episode.tvid == show.id)
+		episodes = eps_query.get()
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'show' : show,
+		'episodes' : episodes
+	}
+	
+	render_template(self, 'show.html', template_values)
 	
   def post(self):
 	user = users.get_current_user()
@@ -95,12 +149,13 @@ class SingleShowPage(webapp2.RequestHandler):
 	show = ''
 	episodes = ''
 	
-	showname = self.request.get('showselect')
-	show_query = TVShow.query((TVShow.name == showname))
+	showid = self.request.get('showselect')
+	show_query = TVShow.query((TVShow.id == showid))
 	show = show_query.get()
 	
-	eps_query = Episode.query(Episode.tvid == show.id)
-	episodes = eps_query.get()
+	if show:
+		eps_query = Episode.query(Episode.tvid == show.id)
+		episodes = eps_query.get()
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -177,7 +232,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	shows = ndb.gql('SELECT * FROM TVShow WHERE name != None LIMIT 20')
+	shows = TVShow.query(TVShow.name != None).fetch(20)
 	
 	template_values = {
 		'login' : login_url,
@@ -202,7 +257,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	shows = ndb.gql('SELECT * FROM TVShow WHERE name != None LIMIT 20')
+	shows = TVShow.query(TVShow.name != None).fetch(20)
 	
 	template_values = {
 		'login' : login_url,
@@ -439,7 +494,7 @@ class Search(webapp2.RequestHandler):
 		'show' : show
 	}
 	
-	render_template(self, 'searchresults.html', template_values)
+	render_template(self, 'searchResults.html', template_values)
 	
 app = webapp2.WSGIApplication([
   ('/', MainPage),

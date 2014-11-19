@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="scripts/funcs.js">///////</script>
 <title>Teleddiction</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
@@ -23,8 +24,8 @@
 			<li><a href="/showlist">Show List</a></li>
 			<li>
 				<form id="search" method="post" action="/search">
-					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50">
-		        <input type="submit" value="search" class="button">
+					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50" >
+					<input type="submit" value="search" class="button" >
 				</form>
 			</li>
 		</ul>
@@ -32,20 +33,22 @@
 </div>
 <div id="singleshow">
 	<form id="searchShow" method="post" action="/show">	
-	<input id="showselectID" name="showselect" type="hidden">
 	{% if show %}
 	<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px">
 		<tr>
 			<td class="showTable">
-				<div id="displayShow" onClick="selectShow(this.form, {{show.name}});"><img id="showImg" src={{show.imgsrc}} alt={{show.imgsrc}} height="200" width="200"></div>
+				<div onclick="selectShow({{show.id}});">
+				<div id="displayShow"><img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}" height="200" width="200"></div>
 				<div id="showName">{{show.name}}</div>
 				<p> {{show.genre}} </p>
-			<td>
+				</div>
+			</td>
 		</tr>
 	</table>
 	{% else %}
 		<div><p>No such show in our database.</p></div>
 	{% endif %}
+	<input type="hidden" name="showselect" id="showselectID" />
 	</form>
 </div>
 <!-- end page -->
