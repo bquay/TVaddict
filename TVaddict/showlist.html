@@ -41,9 +41,11 @@
 		</tr><tr> 
 		{% endif %}
 		<td class="showTable">
-			<div id="displayShow" onClick="selectShow(searchShow, {{show.id}});"><img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}" height="200" width="200"/></div>
+			<div onclick="selectShow({{show.id}});">
+			<div id="displayShow"><img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}" height="200" width="200"/></div>
 			<div id="showName">{{show.name}}</div>
 			<p> {{show.genre}} </p>
+			</div>
 		</td>
 	{% endfor %}
 	</tr>
