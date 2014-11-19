@@ -147,10 +147,27 @@ hr {
 	color: #FFFFFF;
 }
 
-/* search bar */
+/* sign in*/
+
+#sign{
+	float: left;
+	background-color:transparent;
+	-moz-border-radius:22px;
+	-webkit-border-radius:22px;
+	border-radius:22px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Courier New;
+	font-size:11px;
+	font-style:italic;
+}
+
+/* searchbar */
+
 #searchBar{
-		background-color:#c3dfef;
-		float:left
+	background-color:#c3dfef;
+	float:left
 	}
 #search{
 	float:right;
@@ -492,6 +509,8 @@ hr {
 /* Footer */
 
 #footer {
+	clear:both;
+	margin:auto;	
    width: 100%;
 	height: 50px;
 	padding: 1px;

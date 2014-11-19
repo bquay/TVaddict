@@ -13,16 +13,17 @@
 	<img id="logo" src="stylesheets/images/Logo.png" alt="LOGO" />
 	<div id="menu">
 		<ul>
-			<li><a href="/">Home</a></li>
+			<div id="sign">
 			{% if login %}
-				<li id="signin"><a href="{{login}}">Login/Register</a></li>
+				<li><a href="{{login}}">Login/Register</a></li>
 			{% else %}
-				<li id="signout"><a href="{{logout}}">Logout</a></li>
+				<li id="signout"><a href="{{logout}}">Logout</a></li
 				<li><a href="/profile">My Profile</a></li>
 			{% endif %}
-			<li><a href="/episode">Episode View</a></li>
+			</div>			
+			<li><a href="/">Home</a></li>
 			<li><a href="/showlist">Show List</a></li>
-			<li id="seachBar">
+			<li>
 				<form id="search" method="post" action="/search">
 					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50">
 		        <input type="submit" value="search" class="button">

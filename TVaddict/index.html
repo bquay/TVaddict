@@ -12,17 +12,18 @@
 	<img id="logo" src="stylesheets/images/Logo.png" alt="LOGO" />
 	<div id="menu">
 		<ul>
-			<li><a href="/">Home</a></li>
+			<div id="sign">
 			{% if login %}
-				<li id="signin"><a href="{{login}}">Login/Register</a></li>
+				<li><a href="{{login}}">Login/Register</a></li>
 			{% else %}
 				<li id="signout"><a href="{{logout}}">Logout</a></li>
 				<li><a href="/profile">My Profile</a></li>
 			{% endif %}
+			</div>
+			<li><a href="/">Home</a></li>
 			<li><a href="/comments">Comments</a></li>
-			<li><a href="/episode">Episode View</a></li>
 			<li><a href="/showlist">Show List</a></li>
-			<li id="seachBar">
+			<li>
 				<form id="search" method="post" action="/search">
 					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50">
 		        <input type="submit" value="search" class="button">
@@ -31,8 +32,7 @@
 		</ul>
 	</div>
 </div>
-<div id="page">
-		
+<div id="page">	
 	<div id="content">
 		<div style="margin-bottom: 20px;">
 			{% if login %}
@@ -41,23 +41,15 @@
 				<h1 class="title">Welcome {{nickname}}!</h1>
 			{% endif %}
 			<p><strong>Teleddiction</strong> is your home for all thinks TV!!! You're free to use it for both commercial or personal use. I only ask that you don't abuse this new found power!. Anyway <em>Enjoy :)</em></p>
-			<h2>Recently Aired</h2>
-			<p class="aired">This is some random text to fill out the page because we feel it is nessasary. and stuf you know.</p>
-			<blockquote>
-				<p>&ldquo;Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus. Donec placerat odio vel elit. Nullam ante orci, pellentesque eget.&rdquo;</p>
-			</blockquote>
-		</div>
-		<div>&nbsp;</div>
-		<div style="margin-bottom: 20px;">
-			<h2>Hot Shows</h2>
-			<p class="aired">In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat:</p>
-			<blockquote>
-				<p>&ldquo;Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus. Donec placerat odio vel elit. Nullam ante orci, pellentesque eget.&rdquo;</p>
-			</blockquote>
+			<h2>Documentary</h2>
+			{% for show in shows %}
+				{% if show.genre == "Documentary" %}
+					<p>This show {{show.genre}}</p>
+				{% endif %}
+			{% endfor %}
 		</div>
 	</div>
 	<!-- end content -->
-	<div style="clear: both;">&nbsp;</div>
 </div>
 <!-- end page -->
 <div id="footer">
