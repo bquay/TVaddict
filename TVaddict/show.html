@@ -13,12 +13,14 @@
 	<img id="logo" src="stylesheets/images/Logo.png" alt="LOGO" />
 	<div id="menu">
 		<ul>
+			<div id="sign">
 			{% if login %}
-				<li id="signin"><a href="{{login}}">Login/Register</a></li>
+				<li><a href="{{login}}">Login/Register</a></li>
 			{% else %}
 				<li id="signout"><a href="{{logout}}">Logout</a></li>
 				<li><a href="/profile">My Profile</a></li>
 			{% endif %}
+			</div>
 			<li><a href="/">Home</a></li>
 			<li><a href="/comments">Comments</a></li>
 			<li><a href="/showlist">Show List</a></li>
