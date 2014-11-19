@@ -177,7 +177,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	shows = TVShow.query(TVShow.name != None)
+	shows = ndb.gql('SELECT * FROM TVShow WHERE name != None LIMIT 20')
 	
 	template_values = {
 		'login' : login_url,
@@ -202,7 +202,7 @@ class ShowList(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/')
 	
-	shows = TVShow.query(TVShow.name != None)
+	shows = ndb.gql('SELECT * FROM TVShow WHERE name != None LIMIT 20')
 	
 	template_values = {
 		'login' : login_url,
