@@ -24,7 +24,7 @@ function disableClick(){
 
 function selectShow(showid){
 	var form = document.getElementById('searchShow');
-	var TvName = document.getElementById('selectshowID');
+	var TvName = document.getElementById('showselectID');
 	TvName.value = showid;
 	form.submit();
 }
