@@ -69,7 +69,7 @@ class MainPage(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	shows = TVShow.query(TVShow.name != None)	
 	
@@ -93,7 +93,7 @@ class MainPage(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	shows = TVShow.query(TVShow.name != None)	
 	
@@ -127,7 +127,7 @@ class SingleShowPage(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	template_values = {
 		'login' : login_url,
@@ -159,7 +159,7 @@ class SingleShowPage(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	template_values = {
 		'login' : login_url,
@@ -177,18 +177,26 @@ class UserProfile(webapp2.RequestHandler):
     
 	login_url = ''
 	logout_url = ''
-	name = ''
+	newUser =''
 	
 	if user:
 		logout_url = users.create_logout_url('/')
-		name = user.nickname()
+	
+		user_query = User.query((User.user == user))
+		oldUser = user_query.get()
+		if oldUser:
+			newUser = user
+		else:
+			newUser = User()
+			newUser.user = user
+			newUser.put()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
-		'nickname' : name
+		'user' : newUser
 	}
 	
 	render_template(self, 'profile.html', template_values)
@@ -205,7 +213,7 @@ class EpisodeView(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	template_values = {
 		'login' : login_url,
@@ -228,7 +236,7 @@ class ShowList(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	shows = TVShow.query(TVShow.name != None).fetch(20)
 	
@@ -253,7 +261,7 @@ class ShowList(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	shows = TVShow.query(TVShow.name != None).fetch(20)
 	
@@ -280,7 +288,7 @@ class Comments(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/comments')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/comments')
+		login_url = users.create_login_url('/profile')
 	
 	greetings = ndb.gql('SELECT * '
 						'FROM Greeting '
@@ -479,7 +487,7 @@ class Search(webapp2.RequestHandler):
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
 	else:
-		login_url = users.create_login_url('/')
+		login_url = users.create_login_url('/profile')
 	
 	search = self.request.get('searchbar')
 	show_query = TVShow.query((TVShow.name == search))

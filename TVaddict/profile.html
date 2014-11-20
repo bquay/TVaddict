@@ -32,7 +32,9 @@
 	</div>
 </div>
 <div id="page">
-	<p> User Profile Information.</p>
+	{% if user %}
+		<p>{{user.user.nickname}}</p>
+	{% endif %}
 </div>
 <!-- end page -->
 <div id="footer">
