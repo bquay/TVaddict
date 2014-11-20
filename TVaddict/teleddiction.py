@@ -179,6 +179,7 @@ class UserProfile(webapp2.RequestHandler):
 	logout_url = ''
 	newUser =''
 	userShows = ''
+	shows = []
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -187,8 +188,8 @@ class UserProfile(webapp2.RequestHandler):
 		oldUser = user_query.get()
 		if oldUser:
 			newUser = oldUser
-			userShows = oldUser.shows
-		else:
+			for userShow in olderUser.shows:
+				userShows = TVSHow
 			newUser = User()
 			newUser.user = user
 			newUser.put()
@@ -199,7 +200,7 @@ class UserProfile(webapp2.RequestHandler):
 		'login' : login_url,
 		'logout' : logout_url,
 		'user' : newUser,
-		'userShows' : userShows
+		'shows' : shows
 	}
 	
 	render_template(self, 'profile.html', template_values)
