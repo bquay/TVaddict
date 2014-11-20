@@ -122,7 +122,7 @@ class SingleShowPage(webapp2.RequestHandler):
 	
 	if show:
 		episodes = Episode.query(Episode.tvid == show.id).fetch()
-		episodes.sort(key=lambda x: x.date, reversed=False)
+		episodes.sort(key=lambda x: x.date, reverse=False)
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -155,7 +155,7 @@ class SingleShowPage(webapp2.RequestHandler):
 	
 	if show:
 		episodes = Episode.query(Episode.tvid == show.id).fetch()
-		episodes.sort(key=lambda x: x.date, reversed=False)
+		episodes.sort(key=lambda x: x.date, reverse=False)
 	
 	if user:
 		logout_url = users.create_logout_url('/')
