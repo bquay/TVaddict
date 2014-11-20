@@ -43,7 +43,7 @@
 					</td>
 					<td class="showTableSingle">
 						<p> Genre:    {{show.genre}}</p>
-						<p> Airtime:  {{show.airtime}}</p>
+						<p> Airtime:  {{show.airtime.time}}</p>
 						<p> Rating:   {{show.rating}}</p>
 						{% if logout %}
 							<form id="track" method="post" action="/track">
@@ -60,7 +60,7 @@
 	{% endif %}
 	{% if episodes %}
 		{% for episode in episodes %}
-			<div onclick="getEpisode({{episode.tvid}},{{episode.epnumber}});" style="cursor:pointer">{{episode.epnumber}}<br>{{episode.date}}</div>
+			<div onclick="getEpisode({{episode.tvid}},{{episode.epnumber}});" style="cursor:pointer">{{episode.epnumber}}<br>{{episode.date.date}}</div>
 		{% endfor %}
 	{% endif %}
 	<form id="selectEpisode" method="post" action="/episode">	
