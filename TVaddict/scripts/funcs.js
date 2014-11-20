@@ -28,3 +28,11 @@ function selectShow(showid){
 	TvName.value = showid;
 	form.submit();
 }
+function getEpisode(tvid, date){
+	var form = document.getElementById('selectEpisode');
+	var EpTVID = document.getElementById('episodeselectTVIDID');
+	EpTVID.value = tvid;
+	var EpDATE = document.getElementById('episodeselectDATEID');
+	EpDATE.value = date;
+	form.submit();
+}

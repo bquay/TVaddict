@@ -22,7 +22,6 @@
 			{% endif %}
 			</div>
 			<li><a href="/">Home</a></li>
-			<li><a href="/comments">Comments</a></li>
 			<li><a href="/showlist">Show List</a></li>
 			<li>
 				<form id="search" method="post" action="/search">
@@ -46,9 +45,9 @@
 						<p> Genre:    {{show.genre}}</p>
 						<p> Airtime:  {{show.airtime}}</p>
 						<p> Rating:   {{show.rating}}</p>
-						<form id="track" method="post" action="/profile">
+						<form id="track" method="post" action="/track">
 		     	  			 <input type="submit" value="Track" class="trackbutton">
-		    	 	  		 <!-- tracking stuff -->
+		    	 	  		 <input type="hidden" name="trackShowID" value="{{show.id}}">
 						</form>
 					</td>
 				</div>
@@ -59,9 +58,13 @@
 	{% endif %}
 	{% if episodes %}
 		{% for episode in episodes %}
-			<div>{{episode.epnumber}}<br>{{episode.date}}</div>
+			<div onclick="getEpisode({{episode.tvid}},{{episode.date}});">{{episode.epnumber}}<br>{{episode.date}}</div>
 		{% endfor %}
 	{% endif %}
+	<form id="selectEpisode" method="post" action="/episode">	
+		<input type="hidden" name="episodeselectTVID" id="episodeselectTVIDID" />
+		<input type="hidden" name="episodeselectDATE" id="episodeselectDATEID" />
+	</form>
 </div>
 <!-- end page -->
 <div id="footer">

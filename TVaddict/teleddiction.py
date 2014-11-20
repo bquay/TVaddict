@@ -71,7 +71,7 @@ class MainPage(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/profile')
 	
-	shows = TVShow.query(TVShow.name != None)	
+	shows = TVShow.query(TVShow.name != None).fetch(20)	
 	
 	template_values = {
 		'login' : login_url,
@@ -95,7 +95,7 @@ class MainPage(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/profile')
 	
-	shows = TVShow.query(TVShow.name != None)	
+	shows = TVShow.query(TVShow.name != None).fetch(20)	
 	
 	template_values = {
 		'login' : login_url,
@@ -178,6 +178,7 @@ class UserProfile(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	newUser =''
+	userShows = ''
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -185,7 +186,8 @@ class UserProfile(webapp2.RequestHandler):
 		user_query = User.query((User.user == user))
 		oldUser = user_query.get()
 		if oldUser:
-			newUser = user
+			newUser = oldUser
+			userShows = oldUser.shows
 		else:
 			newUser = User()
 			newUser.user = user
@@ -196,18 +198,58 @@ class UserProfile(webapp2.RequestHandler):
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
-		'user' : newUser
+		'user' : newUser,
+		'userShows' : userShows
+	}
+	
+	render_template(self, 'profile.html', template_values)
+	
+  def post(self):
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	newUser =''
+	userShows = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+	
+		user_query = User.query((User.user == user))
+		oldUser = user_query.get()
+		if oldUser:
+			newUser = oldUser
+			userShows = oldUser.shows
+		else:
+			newUser = User()
+			newUser.user = user
+			newUser.put()
+	else:
+		login_url = users.create_login_url('/profile')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'user' : newUser,
+		'userShows' : userShows
 	}
 	
 	render_template(self, 'profile.html', template_values)
 		
 class EpisodeView(webapp2.RequestHandler):
   def get(self):
+	self.redirect('/')
+  
+  def post(self):
 	user = users.get_current_user()
     
 	login_url = ''
 	logout_url = ''
 	name = ''
+	episode =''
+	up = []
+	down = []
+	comments = []
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -215,10 +257,32 @@ class EpisodeView(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/profile')
 	
+	eptvid = self.request.get('episodeselectTVID')
+	epdatestr = self.request.get('episodeselectDATE')
+	epdate = datetime.datetime.strptime(epdateStr, "%Y-%m-%d")
+	ep_query = Episode.query((Episode.tvid == eptvid),(Episode.date == epdate))
+	episode = ep_query.get()
+	
+	
+	for comID in episode.commentids:
+		comment_query = Greeting.query(Greeting.id == comID).fetch()
+		comments.append(comment_query)
+		
+	if user:				
+		for comment in comments:
+			if user in comment.upvoted:
+				up.append(comment.id)
+			if user in comment.downvoted:
+				down.append(comment.id)
+	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
-		'nickname' : name
+		'nickname' : name,
+		'episode' : episode,
+		'up' : up,
+		'down' : down,
+		'comments' : comments
 	}
 	
 	render_template(self, 'episode.html', template_values)	
@@ -316,6 +380,9 @@ class Comments(webapp2.RequestHandler):
 	render_template(self, 'comments.html', template_values)
 	
 class Comment(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
+	
   def post(self):
 	greeting = Greeting(parent=guestbook_key)
 
@@ -325,13 +392,24 @@ class Comment(webapp2.RequestHandler):
 	result = ndb.gql('SELECT * FROM Greeting')
 	number = result.count()
 	
+	eptvid = self.request.get('episodeTVID')
+	epdatestr = self.request.get('episodeDATE')
+	epdate = datetime.datetime.strptime(epdateStr, "%Y-%m-%d")
+	ep_query = Episode.query((Episode.tvid == eptvid),(Episode.date == epdate))
+	episode = ep_query.get()
+	
+	episode.commentids.append(number)
+	
 	greeting.id = number;
 	greeting.content = self.request.get('content')
 	greeting.rating = 0
 	greeting.put()
-	self.redirect('/comments')
+	self.redirect('/episode')
 
 class Rate(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
+	
   def post(self):
 	toVote = self.request.get('updown')
 	comId = int(self.request.get('comId'))
@@ -341,22 +419,22 @@ class Rate(webapp2.RequestHandler):
 	com = com_query.get()
 	
 	if( toVote == "1"):
-		com.rating = com.rating + 1;
-		com.upvoted.append(user)
-		for downed in com.downvoted:
-			if user == downed:
+		if not user in com.upvoted:
+			com.rating = com.rating + 1;
+			if not user in com.downvoted:
+				com.upvoted.append(user)
+			else:
 				com.downvoted.remove(user)
-				com.rating = com.rating + 1;
 	else:
-		com.rating = com.rating - 1;
-		com.downvoted.append(user)
-		for upped in com.upvoted:
-			if user == upped:
+		if not user in com.downvoted:
+			com.rating = com.rating - 1;
+			if not user in com.upvoted:
+				com.downvoted.append(user)
+			else:
 				com.upvoted.remove(user)
-				com.rating = com.rating - 1;
 		
 	com.put()
-	self.redirect('/comments')
+	self.redirect('/episode')
 	
 class GetShows(webapp2.RequestHandler):
   def get(self):
@@ -510,7 +588,22 @@ class FixPng(webapp2.RequestHandler):
 			show.imgsrc = "/stylesheets/images/placeholder.png"
 			show.put()
 	
+class Track(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
 	
+  def post(self):
+	trackShowID = self.request.get('trackShowID')
+	user = users.get_current_user()
+	
+	user_query = User.query((User.user == user))
+	trackUser = user_query.get()
+	
+	if not trackShowID in trackUser.shows:
+		trackUser.shows.append(trackShowID)
+		
+	self.redirect('/profile')
+
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -523,5 +616,6 @@ app = webapp2.WSGIApplication([
   ('/getShows', GetShows),
   ('/searchShow', SearchShow),
   ('/search', Search),
-  ('/fixPNG', FixPng)
+  ('/fixPNG', FixPng),
+  ('/track', Track)
 ], debug=True)
