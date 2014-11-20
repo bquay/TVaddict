@@ -32,8 +32,32 @@
 	</div>
 </div>
 <div id="page">
-	{% if user %}
-		<p>{{user.user.nickname}}</p>
+	{% if user %}	
+		<div>
+			<form id="profile" method="post" action="whateveryouwantbrenden">
+				<fieldset>
+				<legend><div id="title"><strong>Personal information:</strong></div></legend>
+					Name:<br>
+				<input type="text" class="textinput" name="firstname" size="20" maxlength="20"  placeholder={{user.nickname}}>
+				<br><br>
+					<br>Gender:<br>
+				<input type="radio" name="gender" value="male" checked>Male
+					<br>
+				<input type="radio" name="gender" value="female">Female
+				<br><br>
+					<br>Age:<br>
+				<input name="age" type="number" class="textinput"  size="2" maxlength="2"  placeholder="20">
+				<br><br>
+					<br>Bio:<br>
+				<input name="bio" type="text" class="textinput"  size="20" maxlength="500">
+				<br><br>
+				</fieldset>
+				<br />
+		      <input type="submit" value="Submit" class="trackbutton">
+			</form>
+			</div>
+	{% else %}
+		<p> not in the database</p>	
 	{% endif %}
 </div>
 <!-- end page -->

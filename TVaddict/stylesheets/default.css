@@ -483,6 +483,42 @@ hr {
 	float: right;
 }
 
+/* profile */
+#profile {
+}
+
+#profile form {
+	margin: 0;
+	padding: 0;
+}
+
+#profile fieldset {
+	margin: 0;
+	padding: 15px;
+}
+
+#profile p {
+	float: left;
+	padding-top: 5px;
+	font-size: 85%;
+}
+
+#profile input {
+	width: 210px;
+	margin-bottom: 5px;
+}
+
+#profilesubmit {
+	float: right;
+}
+.textinput{
+	margin: 0;
+	padding: 5px 5px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:14px;
+	border-radius: 5px 5px 5px 5px;
+	border:1px solid #0076a3;
+}
 /* Search */
 
 #search {
