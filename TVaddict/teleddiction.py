@@ -258,16 +258,15 @@ class EpisodeView(webapp2.RequestHandler):
 		login_url = users.create_login_url('/profile')
 	
 	eptvid = self.request.get('episodeselectTVID')
-	epdatestr = self.request.get('episodeselectDATE')
-	epdate = datetime.datetime.strptime(epdateStr, "%Y-%m-%d")
-	ep_query = Episode.query((Episode.tvid == eptvid),(Episode.date == epdate))
-	episode = ep_query.get()
-	
-	
+	epnum = int(self.request.get('episodeselectEPNUM'))
+	episode = Episode.query((Episode.tvid == eptvid),(Episode.epnumber == epnum)).get()
+
 	for comID in episode.commentids:
-		comment_query = Greeting.query(Greeting.id == comID).fetch()
+		comment_query = Greeting.query(Greeting.id == comID).get()
 		comments.append(comment_query)
-		
+	
+	comments.sort(key=lambda x: x.rating, reverse=True)
+	
 	if user:				
 		for comment in comments:
 			if user in comment.upvoted:
@@ -393,18 +392,19 @@ class Comment(webapp2.RequestHandler):
 	number = result.count()
 	
 	eptvid = self.request.get('episodeTVID')
-	epdatestr = self.request.get('episodeDATE')
-	epdate = datetime.datetime.strptime(epdateStr, "%Y-%m-%d")
-	ep_query = Episode.query((Episode.tvid == eptvid),(Episode.date == epdate))
-	episode = ep_query.get()
+	epnum = int(self.request.get('episodeEPNUM'))
+	episode_query = Episode.query((Episode.tvid == eptvid),(Episode.epnumber == epnum))
+	episode = episode_query.get()
 	
 	episode.commentids.append(number)
-	
+	episode.put()
+		
 	greeting.id = number;
 	greeting.content = self.request.get('content')
 	greeting.rating = 0
 	greeting.put()
-	self.redirect('/episode')
+	
+	self.redirect('/showlist')
 
 class Rate(webapp2.RequestHandler):
   def get(self):
@@ -599,11 +599,29 @@ class Track(webapp2.RequestHandler):
 	user_query = User.query((User.user == user))
 	trackUser = user_query.get()
 	
+	show_query = TVShow.query(TVShow.id == trackShowID)
+	show = show_query.get()
+	
 	if not trackShowID in trackUser.shows:
 		trackUser.shows.append(trackShowID)
+		trackUser.put()
+		if show.tracking:
+			show.tracking = show.tracking + 1
+		else:
+			show.tracking = 1
+		show.put()
 		
 	self.redirect('/profile')
 
+class setComID(webapp2.RequestHandler):
+  def get(self):
+	episodes = Episode.query(Episode.tvid == "30876")
+
+	for episode in episodes:
+		if ((0 in episode.commentids) and (episode.epnumber != 19)):
+			episode.commentids.remove(0)
+			episode.put()
+	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -617,5 +635,6 @@ app = webapp2.WSGIApplication([
   ('/searchShow', SearchShow),
   ('/search', Search),
   ('/fixPNG', FixPng),
-  ('/track', Track)
+  ('/track', Track),
+  ('/setcom', setComID)
 ], debug=True)

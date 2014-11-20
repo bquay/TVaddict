@@ -20,6 +20,9 @@ handlers:
 - url: /fixPNG
   script: teleddiction.app
   login: admin  
+- url: /setcom
+  script: teleddiction.app
+  login: admin  
   
 - url: /.*
   script: teleddiction.app

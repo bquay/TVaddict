@@ -58,6 +58,11 @@
 	{% else %}
 		<p> not in the database</p>	
 	{% endif %}
+	{% if userShows %}
+		{% for show in userShows %}
+			<div>{{show}}</div>
+		{% endfor %}
+	{% endif%}
 </div>
 <!-- end page -->
 <div id="footer">

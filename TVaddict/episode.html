@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="scripts/funcs.js">//</script>
 <title>Teleddiction</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
@@ -67,9 +68,10 @@
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Comment"></div>
 			<input type="hidden" name="episodeTVID" value="{{episode.tvid}}">
-			<input type="hidden" name="episodeDATE" value="{{episode.date}}">
+			<input type="hidden" name="episodeEPNUM" value="{{episode.epnumber}}">
         </form>
 	</div>
+	<div>{{episode.epnumber}}</div>
 </div>
 <!-- end page -->
 <div id="footer">

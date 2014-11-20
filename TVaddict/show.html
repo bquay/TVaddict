@@ -39,16 +39,18 @@
 			<tr>	
 				<div id="showView">
 					<td class="showTableSingle">
-						<img id="showImg" src={{show.imgsrc}} alt={{show.imgsrc}}>
-						</td>
+						<img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}" />
+					</td>
 					<td class="showTableSingle">
 						<p> Genre:    {{show.genre}}</p>
 						<p> Airtime:  {{show.airtime}}</p>
 						<p> Rating:   {{show.rating}}</p>
-						<form id="track" method="post" action="/track">
-		     	  			 <input type="submit" value="Track" class="trackbutton">
-		    	 	  		 <input type="hidden" name="trackShowID" value="{{show.id}}">
-						</form>
+						{% if logout %}
+							<form id="track" method="post" action="/track">
+								<input type="submit" value="Track" class="trackbutton" />
+								<input type="hidden" name="trackShowID" value="{{show.id}}" />
+							</form>
+						{% endif %}
 					</td>
 				</div>
 			</tr>
@@ -58,12 +60,12 @@
 	{% endif %}
 	{% if episodes %}
 		{% for episode in episodes %}
-			<div onclick="getEpisode({{episode.tvid}},{{episode.date}});">{{episode.epnumber}}<br>{{episode.date}}</div>
+			<div onclick="getEpisode({{episode.tvid}},{{episode.epnumber}});" style="cursor:pointer">{{episode.epnumber}}<br>{{episode.date}}</div>
 		{% endfor %}
 	{% endif %}
 	<form id="selectEpisode" method="post" action="/episode">	
 		<input type="hidden" name="episodeselectTVID" id="episodeselectTVIDID" />
-		<input type="hidden" name="episodeselectDATE" id="episodeselectDATEID" />
+		<input type="hidden" name="episodeselectEPNUM" id="episodeselectEPNUMID" />
 	</form>
 </div>
 <!-- end page -->
