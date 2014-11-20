@@ -121,8 +121,7 @@ class SingleShowPage(webapp2.RequestHandler):
 	show = show_query.get()
 	
 	if show:
-		eps_query = Episode.query(Episode.tvid == show.id)
-		episodes = eps_query.get()
+		episodes = Episode.query(Episode.tvid == show.id).fetch()
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -154,8 +153,7 @@ class SingleShowPage(webapp2.RequestHandler):
 	show = show_query.get()
 	
 	if show:
-		eps_query = Episode.query(Episode.tvid == show.id)
-		episodes = eps_query.get()
+		episodes = Episode.query(Episode.tvid == show.id).fetch()
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -496,6 +494,15 @@ class Search(webapp2.RequestHandler):
 	
 	render_template(self, 'searchResults.html', template_values)
 	
+class FixPng(webapp2.RequestHandler):	
+  def get(self):
+	shows = TVShow.query((TVShow.imgsrc == "placeholder.png")).fetch()
+	if shows:
+		for show in shows:
+			show.imgsrc = "/stylesheets/images/placeholder.png"
+			show.put()
+	
+	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -508,4 +515,5 @@ app = webapp2.WSGIApplication([
   ('/getShows', GetShows),
   ('/searchShow', SearchShow),
   ('/search', Search),
+  ('/fixPNG', FixPng)
 ], debug=True)

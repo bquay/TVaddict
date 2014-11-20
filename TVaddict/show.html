@@ -57,6 +57,11 @@
 	{% else %}
 		<div><p>No such show in our database.</p></div>
 	{% endif %}
+	{% if episodes %}
+		{% for episode in episodes %}
+			<div>{{episode.epnumber}}<br>{{episode.date}}</div>
+		{% endfor %}
+	{% endif %}
 </div>
 <!-- end page -->
 <div id="footer">
