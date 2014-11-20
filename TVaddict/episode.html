@@ -34,7 +34,7 @@
 </div>
 <div id="page">
 	<div><h1>{{show.name}}</h1> Episode Number: {{episode.epnumber}}</div>
-	<img id="showImg" src={{show.imgsrc}} alt={{show.imgsrc}}>
+	<img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}">
 	<form action="/rate" method="post">
 		{% for comment in comments %}
 			<div class="comment">

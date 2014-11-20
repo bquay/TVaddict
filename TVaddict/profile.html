@@ -37,7 +37,7 @@
 				<fieldset>
 				<legend><div id="title"><strong>Personal information:</strong></div></legend>
 					Name:<br>
-				<input type="text" class="textinput" name="firstname" size="20" maxlength="20"  placeholder={{user.user.nickname}}>
+				<input type="text" class="textinput" name="firstname" size="20" maxlength="20"  placeholder="{{user.user.nickname}}">
 				<br><br>
 					<br>Gender:<br>
 				<input type="radio" name="gender" value="male" checked>Male
@@ -58,9 +58,9 @@
 	{% else %}
 		<p> not in the database</p>	
 	{% endif %}
-	{% if userShows %}
-		{% for show in userShows %}
-			<div>{{show}}</div>
+	{% if shows %}
+		{% for show in shows %}
+			<div>{{show.name}}</div>
 		{% endfor %}
 	{% endif%}
 </div>

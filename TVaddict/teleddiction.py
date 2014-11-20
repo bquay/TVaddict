@@ -188,8 +188,10 @@ class UserProfile(webapp2.RequestHandler):
 		oldUser = user_query.get()
 		if oldUser:
 			newUser = oldUser
-			for userShow in olderUser.shows:
-				userShows = TVSHow
+			for userShow in oldUser.shows:
+				userShows_query = TVShow.query(TVShow.id == userShow)
+				shows.append(userShows_query.get())
+		else:
 			newUser = User()
 			newUser.user = user
 			newUser.put()
@@ -251,6 +253,7 @@ class EpisodeView(webapp2.RequestHandler):
 	up = []
 	down = []
 	comments = []
+	show = ''
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -268,6 +271,8 @@ class EpisodeView(webapp2.RequestHandler):
 	
 	comments.sort(key=lambda x: x.rating, reverse=True)
 	
+	show = TVShow.query(TVShow.id == episode.tvid).get()
+	
 	if user:				
 		for comment in comments:
 			if user in comment.upvoted:
@@ -282,7 +287,8 @@ class EpisodeView(webapp2.RequestHandler):
 		'episode' : episode,
 		'up' : up,
 		'down' : down,
-		'comments' : comments
+		'comments' : comments,
+		'show' : show
 	}
 	
 	render_template(self, 'episode.html', template_values)	
