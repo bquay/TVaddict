@@ -218,6 +218,19 @@ hr {
 	padding: 30px 0;
 }
 
+#profileShow{
+	margin: 0 auto;
+	border-radius: 10px/10px;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;	
+	text-align: center;
+	padding: 5px;
+	font-size: 20px;
+	align-content: center;
+   border-style: solid;
+   border-color: #989898;
+   border-width: 1px;
+}
+
 #singleshow{
 	margin: 0 auto;
 	border-radius: 10px/10px;
