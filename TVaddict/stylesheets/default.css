@@ -251,6 +251,7 @@ hr {
 	border-radius: 10px/10px;
    background: #C0C0C0;
    border-style: solid;
+   align-content: center;
    border-color: #989898;
    border-width: 1px;
    padding: 5px;
@@ -268,6 +269,7 @@ hr {
    border-style: solid;
    border-color: ##404040;
    border-width: 1px;
+   align-content: center;
    padding: 5px;
    margin:3px;
 }
@@ -279,7 +281,7 @@ hr {
 }
 #showImg{
 	height: 100%;
-	align-content: left;
+	align-content: center;
 }
 
 .trackbutton {
