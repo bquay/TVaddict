@@ -71,13 +71,17 @@ class MainPage(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/profile')
 	
-	shows = TVShow.query(TVShow.name != None).fetch(20)	
+	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
+	Documentary = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Documentary")
+	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'shows' : shows
+		'topRated' : topRating,
+		'Documentary' : Documentary,
+		'Reality' : Reality
 	}
 	
 	render_template(self, 'index.html', template_values)
@@ -95,13 +99,17 @@ class MainPage(webapp2.RequestHandler):
 	else:
 		login_url = users.create_login_url('/profile')
 	
-	shows = TVShow.query(TVShow.name != None).fetch(20)	
+	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
+	Documentary = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Documentary")
+	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'shows' : shows
+		'topRated' : topRating,
+		'Documentary' : Documentary,
+		'Reality' : Reality
 	}
 	
 	render_template(self, 'index.html', template_values)
@@ -180,7 +188,6 @@ class UserProfile(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	newUser =''
-	userShows = ''
 	shows = []
 	
 	if user:
@@ -215,7 +222,7 @@ class UserProfile(webapp2.RequestHandler):
 	login_url = ''
 	logout_url = ''
 	newUser =''
-	userShows = ''
+	shows = []
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -238,11 +245,44 @@ class UserProfile(webapp2.RequestHandler):
 		'login' : login_url,
 		'logout' : logout_url,
 		'user' : newUser,
-		'userShows' : userShows
+		'shows' : shows
 	}
 	
 	render_template(self, 'profile.html', template_values)
+	
+class OtherProfile(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
+	
+  def post(self):
+	login_url = ''
+	logout_url = ''
+	otherUser =''
+	shows = []
+	user = users.get_current_user()
+	
+	if user:
+		logout_url = users.create_logout_url('/')
 		
+		otherUserName = self.request.get('userSelect')
+		user_query = User.query((User.name == otherUserName))
+		otherUser = user_query.get()
+		
+		for userShow in otherUser.shows:
+			userShows_query = TVShow.query(TVShow.id == userShow)
+			shows.append(userShows_query.get())
+	else:
+		login_url = users.create_login_url('/profile')
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'user' : otherUser,
+		'shows' : shows
+	}
+	
+	render_template(self, 'otherProfile.html', template_values)
+	
 class EpisodeView(webapp2.RequestHandler):
   def get(self):
 	self.redirect('/')
@@ -571,6 +611,7 @@ class Search(webapp2.RequestHandler):
 	logout_url = ''
 	name = ''
 	show = ''
+	user ='' 
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -582,11 +623,15 @@ class Search(webapp2.RequestHandler):
 	show_query = TVShow.query((TVShow.name == search))
 	show = show_query.get()
 	
+	user_query = User.query((User.name == search))
+	user = user_query.get()
+	
 	template_values = {
 		'login' : login_url,
 		'logout' : logout_url,
 		'nickname' : name,
-		'show' : show
+		'show' : show,
+		'user' : user
 	}
 	
 	render_template(self, 'searchResults.html', template_values)
@@ -633,6 +678,41 @@ class setComID(webapp2.RequestHandler):
 			episode.commentids.remove(0)
 			episode.put()
 	
+class setUserInfo(webapp2.RequestHandler):
+  def post(self):
+	name = self.request.get('firstname')
+	bio = self.request.get('bio')
+	gender = self.request.get('chosenGender')
+	age = int(self.request.get('age'))
+	user = users.get_current_user()
+
+	user_query = User.query((User.user == user))
+	oldUser = user_query.get()
+	oldUser.name = name
+	oldUser.bio = bio
+	oldUser.age = age
+	oldUser.gender = gender
+	oldUser.put()
+	
+	self.redirect('/profile')
+
+class RateShow(webapp2.RequestHandler):
+  def get(self):
+	self.redirect('/')
+	
+  def post(self):
+	rating = int(self.request.get('rateShow'))
+	showID = self.request.get('showID')
+	show_query = TVShow.query((TVShow.id == showID))
+	show = show_query.get()
+	if (rating == 1):
+		show.rating = show.rating + 1;
+	else:
+		show.rating = show.rating - 1;
+		
+	show.put()
+	self.redirect('/show')
+	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/comment', Comment),
@@ -647,5 +727,8 @@ app = webapp2.WSGIApplication([
   ('/search', Search),
   ('/fixPNG', FixPng),
   ('/track', Track),
-  ('/setcom', setComID)
+  ('/setcom', setComID),
+  ('/otherUser', OtherProfile),
+  ('/setUserInfo', setUserInfo),
+  ('/rateShow', RateShow)
 ], debug=True)

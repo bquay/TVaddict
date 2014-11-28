@@ -28,6 +28,26 @@ function selectShow(showid){
 	TvName.value = showid;
 	form.submit();
 }
+function selectUser(){
+	var form = document.getElementById('searchUser');
+	form.submit();
+}
+function setGender(gender){
+	var selectGender = document.getElementById('selectGender');
+	selectGender.value = gender;
+}
+function upvoteshow(){
+	var form = document.getElementById('rate');
+	var rateshowid = document.getElementById('rateShowID');
+	rateshowid.value = "1";
+	form.submit();
+}
+function downvoteshow(){
+	var form = document.getElementById('rate');
+	var rateshowid = document.getElementById('rateShowID');
+	rateshowid.value = "-1";
+	form.submit();
+}
 function getEpisode(tvid, epnum){
 	var form = document.getElementById('selectEpisode');
 	var EpTVID = document.getElementById('episodeselectTVIDID');

@@ -44,8 +44,17 @@
 					<td class="showTableSingle">
 						<p> Genre:    {{show.genre}}</p>
 						<p> Airtime:  {{show.airtime.time}}</p>
-						<p> Rating:   {{show.rating}}</p>
+						{% if not logout %}
+							<p> Rating:   {{show.rating}}</p>
+						{% endif %}
 						{% if logout %}
+							<div onclick="upvoteshow();"style="cursor:pointer">+</div>
+								<p> Rating:   {{show.rating}}</p>
+							<div onclick="downvoteshow();" style="cursor:pointer">-</div>
+							<form id="rate" method="post" action="/rateShow">
+								<input type="hidden" name="rateShow" id="rateShowID">
+								<input type="hidden" name="showID" value="{{show.id}}">
+							</form>
 							<form id="track" method="post" action="/track">
 								<input type="submit" value="Track" class="trackbutton" />
 								<input type="hidden" name="trackShowID" value="{{show.id}}" />

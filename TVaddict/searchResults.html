@@ -33,11 +33,12 @@
 	</div>
 </div>
 <div id="singleshow">
-	<form id="searchShow" method="post" action="/show">	
-	{% if show %}<i></i>
-	<div onclick="selectShow({{show.id}});" style="cursor:pointer">
-		<h1>{{show.name}}</h1>
-	</div>	
+	{% if show %}
+		<form id="searchShow" method="post" action="/show">	
+		<i></i>
+		<div onclick="selectShow({{show.id}});" style="cursor:pointer">
+			<h1>{{show.name}}</h1>
+		</div>	
 		<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px" >
 			<tr>	
 				<div id="showView">
@@ -54,11 +55,15 @@
 				</div>
 			</tr>
 		</table>
-	{% else %}
-		<div><p>No such show in our database.</p></div>
+		<input type="hidden" name="showselect" id="showselectID" />
+		</form>
 	{% endif %}
-	<input type="hidden" name="showselect" id="showselectID" />
-	</form>
+	{% if user %}
+		<form id="searchUser" method="post" action="/otherUser">
+			<div onclick="selectUser();" style="cursor:pointer">{{user.name}}</div>
+			<input type="hidden" name="userSelect" value="{{user.name}}">
+		</form>
+	{% endif %}
 </div>
 <!-- end page -->
 <div id="footer">
