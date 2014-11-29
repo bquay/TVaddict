@@ -33,7 +33,13 @@
 	</div>
 </div>
 <div id="page">
-	<div><h1>{{show.name}}</h1> Episode Number: {{episode.epnumber}}</div>
+	<div>
+		<h1>{{show.name}}</h1>
+		{% if episode.title %}
+			<h2>Episode Title: {{episode.title}}</h2>
+		{% endif %}
+		<h2>Episode Number: {{episode.epnumber}}</h2>
+	</div>
 	<img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}">
 	<form action="/rate" method="post">
 		{% for comment in comments %}

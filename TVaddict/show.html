@@ -69,7 +69,13 @@
 	{% endif %}
 	{% if episodes %}
 		{% for episode in episodes %}
-			<div onclick="getEpisode({{episode.tvid}},{{episode.epnumber}});" style="cursor:pointer">Episode Number: {{episode.epnumber}}<br> Air Time: {{episode.date.date}}</div>
+			<div onclick="getEpisode({{episode.tvid}},{{episode.epnumber}});" style="cursor:pointer">
+				{% if episode.title %}
+					Episode Title: {{episode.title}}
+				{% endif %}
+				Episode Number: {{episode.epnumber}}<br>
+				Air Time: {{episode.date.date}}
+			</div>
 			<br />
 		{% endfor %}
 	{% endif %}

@@ -46,6 +46,7 @@ class Episode(ndb.Model):
   date = ndb.DateTimeProperty()
   rating = ndb.IntegerProperty()
   commentids = ndb.IntegerProperty(repeated=True)
+  title = ndb.StringProperty()
   
 class TVShow(ndb.Model):
   id = ndb.StringProperty()
@@ -591,6 +592,10 @@ class SearchShow(webapp2.RequestHandler):
 					epi.tvid = show.id
 					epi.date = checkDate
 					epi.rating = 0
+					try:
+						epi.title = episode.find('title').text
+					except:
+						epi.title = ''
 					epi.put()
 			except AttributeError:
 				print "Delete TVShow with id=", show.id
