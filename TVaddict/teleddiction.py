@@ -470,7 +470,8 @@ class Comment(webapp2.RequestHandler):
 	number = result.count()
 	
 	eptvid = self.request.get('episodeTVID')
-	epnum = int(self.request.get('episodeEPNUM'))
+	epnum_str = self.request.get('episodeEPNUM')
+	epnum = int(epnum_str)
 	episode_query = Episode.query((Episode.tvid == eptvid),(Episode.epnumber == epnum))
 	episode = episode_query.get()
 	
