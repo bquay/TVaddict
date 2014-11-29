@@ -61,23 +61,35 @@ class TVShow(ndb.Model):
 class MainPage(webapp2.RequestHandler):
   def get(self):
 	user = users.get_current_user()
-    
 	login_url = ''
 	logout_url = ''
 	name = ''
+	recentlyAired = []
 	
 	startTime_utc = datetime.datetime.now()
-	endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
+	#endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
 	
-	startTime = startTime_utc - datetime.timedelta(hours=5)
-	endTime = endTime_utc - datetime.timedelta(hours=5)
+	#startTime = startTime_utc - datetime.timedelta(hours=5)
+	#endTime = endTime_utc - datetime.timedelta(hours=5)
 	
-	startTime = startTime.replace(year=1900)
-	startTime = startTime.replace(month=1)
-	startTime = startTime.replace(day=1)
-	endTime = endTime.replace(year=1900)
-	endTime = endTime.replace(month=1)
-	endTime = endTime.replace(day=1)
+	#startTime = startTime.replace(year=1900)
+	#startTime = startTime.replace(month=1)
+	#startTime = startTime.replace(day=1)
+	#endTime = endTime.replace(year=1900)
+	#endTime = endTime.replace(month=1)
+	#endTime = endTime.replace(day=1)
+	
+	dateTime = startTime_utc
+	dateTime = dateTime.replace(hour=0)
+	dateTime = dateTime.replace(minute=0)
+	dateTime = dateTime.replace(second=0)
+	dateTime = dateTime.replace(microsecond=0)
+	
+	endDate = dateTime - datetime.timedelta(days=3)
+	endDate = endDate.replace(hour=0)
+	endDate = endDate.replace(minute=0)
+	endDate = endDate.replace(second=0)
+	endDate = endDate.replace(microsecond=0)
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -86,7 +98,11 @@ class MainPage(webapp2.RequestHandler):
 		login_url = users.create_login_url('/profile')
 	
 	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
-	recentlyAired = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 ORDER BY airtime ASC LIMIT 7',startTime,endTime)
+	epToday = ndb.gql('SELECT * FROM Episode WHERE date <= :1 AND date >= :2 ORDER BY date DESC LIMIT 7',dateTime, endDate)
+	for ep in epToday:
+		#showNow = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 AND id = :3',startTime, endTime, ep.tvid)
+		showNow = ndb.gql('SELECT * FROM TVShow WHERE id = :1',ep.tvid)
+		recentlyAired.append(showNow.get())
 	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
@@ -102,23 +118,35 @@ class MainPage(webapp2.RequestHandler):
 	
   def post(self):
 	user = users.get_current_user()
-    
 	login_url = ''
 	logout_url = ''
 	name = ''
+	recentlyAired = []
 	
 	startTime_utc = datetime.datetime.now()
-	endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
+	#endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
 	
-	startTime = startTime_utc - datetime.timedelta(hours=5)
-	endTime = endTime_utc - datetime.timedelta(hours=5)
+	#startTime = startTime_utc - datetime.timedelta(hours=5)
+	#endTime = endTime_utc - datetime.timedelta(hours=5)
 	
-	startTime = startTime.replace(year=1900)
-	startTime = startTime.replace(month=1)
-	startTime = startTime.replace(day=1)
-	endTime = endTime.replace(year=1900)
-	endTime = endTime.replace(month=1)
-	endTime = endTime.replace(day=1)
+	#startTime = startTime.replace(year=1900)
+	#startTime = startTime.replace(month=1)
+	#startTime = startTime.replace(day=1)
+	#endTime = endTime.replace(year=1900)
+	#endTime = endTime.replace(month=1)
+	#endTime = endTime.replace(day=1)
+	
+	dateTime = startTime_utc
+	dateTime = dateTime.replace(hour=0)
+	dateTime = dateTime.replace(minute=0)
+	dateTime = dateTime.replace(second=0)
+	dateTime = dateTime.replace(microsecond=0)
+	
+	endDate = dateTime - datetime.timedelta(days=3)
+	endDate = endDate.replace(hour=0)
+	endDate = endDate.replace(minute=0)
+	endDate = endDate.replace(second=0)
+	endDate = endDate.replace(microsecond=0)
 	
 	if user:
 		logout_url = users.create_logout_url('/')
@@ -127,7 +155,11 @@ class MainPage(webapp2.RequestHandler):
 		login_url = users.create_login_url('/profile')
 	
 	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
-	recentlyAired = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 ORDER BY airtime ASC LIMIT 7',startTime,endTime)
+	epToday = ndb.gql('SELECT * FROM Episode WHERE date <= :1 AND date >= :2 ORDER BY date DESC LIMIT 7',dateTime, endDate)
+	for ep in epToday:
+		#showNow = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 AND id = :3',startTime, endTime, ep.tvid)
+		showNow = ndb.gql('SELECT * FROM TVShow WHERE id = :1',ep.tvid)
+		recentlyAired.append(showNow.get())
 	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
