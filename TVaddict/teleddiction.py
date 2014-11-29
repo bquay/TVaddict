@@ -312,7 +312,64 @@ class OtherProfile(webapp2.RequestHandler):
 	
 class EpisodeView(webapp2.RequestHandler):
   def get(self):
-	self.redirect('/')
+	user = users.get_current_user()
+    
+	login_url = ''
+	logout_url = ''
+	name = ''
+	episode =''
+	up = []
+	down = []
+	comments = []
+	show = ''
+	
+	if user:
+		logout_url = users.create_logout_url('/')
+		name = user.nickname()
+	else:
+		login_url = users.create_login_url('/profile')
+	
+	eptvid = self.request.get('episodeselectTVID')
+	epnum = int(self.request.get('episodeselectEPNUM'))
+	episode = Episode.query((Episode.tvid == eptvid),(Episode.epnumber == epnum)).get()
+
+	if episode.commentids:
+		for comID in episode.commentids:
+			comment_query = Greeting.query(Greeting.id == comID).get()
+			comments.append(comment_query)
+	
+		try:
+			comments.sort(key=lambda x: x.rating, reverse=True)
+		except AttributeError:
+			comments = comments
+			
+		if user:				
+			for comment in comments:
+				try:
+					if user in comment.upvoted:
+						up.append(comment.id)
+				except AttributeError:
+					up = []
+				try:
+					if user in comment.downvoted:
+						down.append(comment.id)
+				except AttributeError:
+					down = []
+	
+	show = TVShow.query(TVShow.id == episode.tvid).get()
+	
+	template_values = {
+		'login' : login_url,
+		'logout' : logout_url,
+		'nickname' : name,
+		'episode' : episode,
+		'up' : up,
+		'down' : down,
+		'comments' : comments,
+		'show' : show
+	}
+	
+	render_template(self, 'episode.html', template_values)
   
   def post(self):
 	user = users.get_current_user()
@@ -336,20 +393,30 @@ class EpisodeView(webapp2.RequestHandler):
 	epnum = int(self.request.get('episodeselectEPNUM'))
 	episode = Episode.query((Episode.tvid == eptvid),(Episode.epnumber == epnum)).get()
 
-	for comID in episode.commentids:
-		comment_query = Greeting.query(Greeting.id == comID).get()
-		comments.append(comment_query)
+	if episode.commentids:
+		for comID in episode.commentids:
+			comment_query = Greeting.query(Greeting.id == comID).get()
+			comments.append(comment_query)
+		
+		try:
+			comments.sort(key=lambda x: x.rating, reverse=True)
+		except AttributeError:
+			comments = comments
 	
-	comments.sort(key=lambda x: x.rating, reverse=True)
+		if user:				
+			for comment in comments:
+				try:
+					if user in comment.upvoted:
+						up.append(comment.id)
+				except AttributeError:
+					up = []
+				try:
+					if user in comment.downvoted:
+						down.append(comment.id)
+				except AttributeError:
+					down = []
 	
 	show = TVShow.query(TVShow.id == episode.tvid).get()
-	
-	if user:				
-		for comment in comments:
-			if user in comment.upvoted:
-				up.append(comment.id)
-			if user in comment.downvoted:
-				down.append(comment.id)
 	
 	template_values = {
 		'login' : login_url,
@@ -362,7 +429,7 @@ class EpisodeView(webapp2.RequestHandler):
 		'show' : show
 	}
 	
-	render_template(self, 'episode.html', template_values)	
+	render_template(self, 'episode.html', template_values)
 		
 class ShowList(webapp2.RequestHandler):
   def get(self):
@@ -483,14 +550,14 @@ class Comment(webapp2.RequestHandler):
 	greeting.rating = 0
 	greeting.put()
 	
-	self.redirect('/episode?episodeselectTVID=' + eptvid + '&episodeselectEPNUM=' + epnum)
+	self.redirect('/episode?episodeselectTVID=' + eptvid + '&episodeselectEPNUM=' + epnum_str)
 
 class Rate(webapp2.RequestHandler):
   def get(self):
 	self.redirect('/')
 	
   def post(self):
-	eptvid = self.request.get('eptvid')
+	eptvid = self.request.get('tvid')
 	epnum = self.request.get('epnum')
 	toVote = self.request.get('updown')
 	comId = int(self.request.get('comId'))
