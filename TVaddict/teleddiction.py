@@ -66,6 +66,19 @@ class MainPage(webapp2.RequestHandler):
 	logout_url = ''
 	name = ''
 	
+	startTime_utc = datetime.datetime.now()
+	endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
+	
+	startTime = startTime_utc - datetime.timedelta(hours=5)
+	endTime = endTime_utc - datetime.timedelta(hours=5)
+	
+	startTime = startTime.replace(year=1900)
+	startTime = startTime.replace(month=1)
+	startTime = startTime.replace(day=1)
+	endTime = endTime.replace(year=1900)
+	endTime = endTime.replace(month=1)
+	endTime = endTime.replace(day=1)
+	
 	if user:
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
@@ -73,7 +86,7 @@ class MainPage(webapp2.RequestHandler):
 		login_url = users.create_login_url('/profile')
 	
 	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
-	Documentary = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Documentary")
+	recentlyAired = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 ORDER BY airtime ASC LIMIT 7',startTime,endTime)
 	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
@@ -81,7 +94,7 @@ class MainPage(webapp2.RequestHandler):
 		'logout' : logout_url,
 		'nickname' : name,
 		'topRated' : topRating,
-		'Documentary' : Documentary,
+		'recentlyAired' : recentlyAired,
 		'Reality' : Reality
 	}
 	
@@ -94,6 +107,19 @@ class MainPage(webapp2.RequestHandler):
 	logout_url = ''
 	name = ''
 	
+	startTime_utc = datetime.datetime.now()
+	endTime_utc = startTime_utc - datetime.timedelta(minutes=30)
+	
+	startTime = startTime_utc - datetime.timedelta(hours=5)
+	endTime = endTime_utc - datetime.timedelta(hours=5)
+	
+	startTime = startTime.replace(year=1900)
+	startTime = startTime.replace(month=1)
+	startTime = startTime.replace(day=1)
+	endTime = endTime.replace(year=1900)
+	endTime = endTime.replace(month=1)
+	endTime = endTime.replace(day=1)
+	
 	if user:
 		logout_url = users.create_logout_url('/')
 		name = user.nickname()
@@ -101,7 +127,7 @@ class MainPage(webapp2.RequestHandler):
 		login_url = users.create_login_url('/profile')
 	
 	topRating = ndb.gql('SELECT * FROM TVShow ORDER BY rating DESC LIMIT 7')
-	Documentary = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Documentary")
+	recentlyAired = ndb.gql('SELECT * FROM TVShow WHERE airtime <= :1 AND airtime >= :2 ORDER BY airtime ASC LIMIT 7',startTime,endTime)
 	Reality = ndb.gql('SELECT * FROM TVShow WHERE genre = :1 LIMIT 7',"Reality")
 	
 	template_values = {
@@ -109,7 +135,7 @@ class MainPage(webapp2.RequestHandler):
 		'logout' : logout_url,
 		'nickname' : name,
 		'topRated' : topRating,
-		'Documentary' : Documentary,
+		'recentlyAired' : recentlyAired,
 		'Reality' : Reality
 	}
 	
