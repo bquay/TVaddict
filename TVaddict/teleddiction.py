@@ -482,13 +482,15 @@ class Comment(webapp2.RequestHandler):
 	greeting.rating = 0
 	greeting.put()
 	
-	self.redirect('/showlist')
+	self.redirect('/episode?episodeselectTVID=' + eptvid + '&episodeselectEPNUM=' + epnum)
 
 class Rate(webapp2.RequestHandler):
   def get(self):
 	self.redirect('/')
 	
   def post(self):
+	eptvid = self.request.get('eptvid')
+	epnum = self.request.get('epnum')
 	toVote = self.request.get('updown')
 	comId = int(self.request.get('comId'))
 	user = users.get_current_user()
@@ -512,7 +514,7 @@ class Rate(webapp2.RequestHandler):
 				com.upvoted.remove(user)
 		
 	com.put()
-	self.redirect('/episode')
+	self.redirect('/episode?episodeselectTVID=' + eptvid + '&episodeselectEPNUM=' + epnum)
 	
 class GetShows(webapp2.RequestHandler):
   def get(self):
@@ -698,7 +700,7 @@ class Track(webapp2.RequestHandler):
 			show.tracking = 1
 		show.put()
 		
-	self.redirect('/profile')
+	self.redirect('/show?showselect=' + trackShowID)
 
 class setComID(webapp2.RequestHandler):
   def get(self):
@@ -742,7 +744,7 @@ class RateShow(webapp2.RequestHandler):
 		show.rating = show.rating - 1;
 		
 	show.put()
-	self.redirect('/show')
+	self.redirect('/show?showselect=' + showID)
 	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
