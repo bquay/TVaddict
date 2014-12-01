@@ -23,12 +23,14 @@
 			</div>
 			<li><a href="/">Home</a></li>
 			<li><a href="/showlist">Show List</a></li>
+			{% if logout %}
 			<li>
 				<form id="search" method="post" action="/search">
 					<input name="searchbar" type="text" class="textinput"  size="25" maxlength="50">
 		        <input type="submit" value="search" class="button">
 				</form>
 			</li>
+			{% endif %}
 		</ul>
 	</div>
 </div>
