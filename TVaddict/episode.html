@@ -73,6 +73,9 @@
 		<input type="hidden" name="epnum" value="{{episode.epnumber}}">
 	</form>
 	<div>
+	{% if login %}
+		<p> You need to be logged in to rate or add a comment</p>	
+	{% else %}
 		<p> Add a comment below</p>
         <form action="/comment" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
@@ -80,6 +83,7 @@
 			<input type="hidden" name="episodeTVID" value="{{episode.tvid}}">
 			<input type="hidden" name="episodeEPNUM" value="{{episode.epnumber}}">
         </form>
+	{% endif %}
 	</div>
 </div>
 <!-- end page -->

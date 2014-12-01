@@ -34,19 +34,17 @@
 <div id="page">
 	{% if user %}	
 		<div>
-			<legend><div id="title"><strong>Personal information:</strong></div></legend>
-				Name:<br><br>
-				<div>{{user.name}}</div>
-				<br>
-				<br>Gender:<br>
-				<div>{{user.gender}}</div>
-				<br>
-				<br>Age:<br>
-				<div>{{user.age}}</div>
-				<br>
-				<br>Bio:<br>
-				<div>{{user.bio}}</div>
-			<br><br>
+			<fieldset>
+				<legend><div id="title"><strong>Personal information:</strong></div></legend>	
+					<br>
+					<strong>Name:</strong><br />	<div>{{user.name}}</div>
+					<br>
+					<br><strong>Gender:</strong><br /> <div>{{user.gender}}</div>
+					<br>
+					<br><strong>Age:</strong><br /> <div>{{user.age}}</div>
+					<br>
+					<br><strong>Bio:</strong><br /> <div>{{user.bio}}</div>
+			</fieldset>
 		</div>
 	{% else %}
 		<p> not in the database</p>	
