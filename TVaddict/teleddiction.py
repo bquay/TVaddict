@@ -667,7 +667,7 @@ class SearchShow(webapp2.RequestHandler):
   def get(self):
 	urlfetch.set_default_fetch_deadline(600)
 	tvshow_query = TVShow.query((TVShow.name == None))
-	shows = tvshow_query.fetch(limit=100)
+	shows = tvshow_query.fetch(limit=20)
 	for show in shows:
 		url = 'http://services.tvrage.com/feeds/full_show_info.php?sid=' + show.id
 		request = urllib2.Request(url, headers={"Accept" : "application/xml"})
