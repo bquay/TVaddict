@@ -1,7 +1,7 @@
 cron:
 - description: weekly check for new shows
   url: /getShows
-  schedule: every saturday 18:00
+  schedule: every thursday 18:00
 - description: daily update for episodes
   url: /searchShow
-  schedule: every saturday 02:15
+  schedule: every monday 03:00
