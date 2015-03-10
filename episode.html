@@ -17,7 +17,7 @@
 			{% if login %}
 				<li><a href="{{login}}">Login/Register</a></li>
 			{% else %}
-				<li id="signout"><a href="{{logout}}">Logout</a></li
+				<li id="signout"><a href="{{logout}}">Logout</a></li>
 				<li><a href="/profile">My Profile</a></li>
 			{% endif %}
 			</div>			
@@ -35,7 +35,15 @@
 	</div>
 </div>
 <div id="page">
-		<form action="/rate" method="post">
+	<div>
+		<h1>{{show.name}}</h1>
+		{% if episode.title %}
+			<h2>{{episode.title}}</h2>
+		{% endif %}
+		<h2>Episode Number: {{episode.epnumber}}</h2>
+	</div>
+	<img id="showImg" src="{{show.imgsrc}}" alt="{{show.imgsrc}}">
+	<form action="/rate" method="post">
 		{% for comment in comments %}
 			<div class="comment">
 				{% if logout %}
@@ -54,7 +62,7 @@
 					<div class="rating">{{comment.rating}}</div>
 				{% endif %}
 				{% if comment.author %}
-					<b>{{comment.author.user}}</b> wrote:<br>
+					<b>{{comment.author.nickname}}</b> wrote:<br>
 				{% else %}
 					<b>An anonymous person</b> wrote:<br>
 				{% endif%}
@@ -63,15 +71,22 @@
 		{% endfor %}	
 		<input type="hidden" name="updown" id="updown"/>
 		<input type="hidden" name="comId" id="comId"/>
-		</form>
+		<input type="hidden" name="tvid" value="{{episode.tvid}}">
+		<input type="hidden" name="epnum" value="{{episode.epnumber}}">
+	</form>
 	<div>
+	{% if login %}
+		<p> You need to be logged in to rate or add a comment</p>	
+	{% else %}
 		<p> Add a comment below</p>
         <form action="/comment" method="post">
             <div><textarea name="content" rows="3" cols="60"></textarea></div>
             <div><input type="submit" value="Comment"></div>
+			<input type="hidden" name="episodeTVID" value="{{episode.tvid}}">
+			<input type="hidden" name="episodeEPNUM" value="{{episode.epnumber}}">
         </form>
+	{% endif %}
 	</div>
-	<div style="clear: both;">&nbsp;</div>
 </div>
 <!-- end page -->
 <div id="footer">

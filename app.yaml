@@ -1,4 +1,4 @@
-application: teleddiction
+application: pittdesignexpo
 version: 1
 runtime: python27
 api_version: 1
@@ -12,20 +12,20 @@ handlers:
   static_dir: scripts
   
 - url: /getShows
-  script: teleddiction.app
+  script: pittdesignexpo.app
   login: admin
 - url: /searchShow
-  script: teleddiction.app
+  script: pittdesignexpo.app
   login: admin  
 - url: /fixPNG
-  script: teleddiction.app
+  script: pittdesignexpo.app
   login: admin  
 - url: /setcom
-  script: teleddiction.app
+  script: pittdesignexpo.app
   login: admin  
   
 - url: /.*
-  script: teleddiction.app
+  script: pittdesignexpo.app
   
 libraries:
 - name: webapp2
