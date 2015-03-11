@@ -4,6 +4,9 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+inbound_services:
+- mail 
+
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
@@ -11,21 +14,19 @@ handlers:
 - url: /scripts
   static_dir: scripts
   
-- url: /getShows
-  script: pittdesignexpo.app
-  login: admin
-- url: /searchShow
+- url: /stopVoting
   script: pittdesignexpo.app
   login: admin  
-- url: /fixPNG
+- url: /startVoting
   script: pittdesignexpo.app
   login: admin  
-- url: /setcom
+ 
+- url: /_ah/mail/.+
   script: pittdesignexpo.app
   login: admin  
   
 - url: /.*
-  script: pittdesignexpo.app
+  script: pittdesignexpo.app 
   
 libraries:
 - name: webapp2
