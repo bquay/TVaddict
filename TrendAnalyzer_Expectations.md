@@ -29,3 +29,4 @@ o	Confirm that [tag or poster] that received the three votes is now at the top o
 1.	[tag or poster] 4: 3 votes
 2.	[tag or poster] 2: 2 votes
 3.	[tag or poster] 1: 1 vote
+a
