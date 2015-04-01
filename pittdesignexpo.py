@@ -40,12 +40,6 @@ class MainPage(webapp2.RequestHandler):
 	}
 	
 	render_template(self, 'index.html', template_values)
-	
-  def post(self):
-	template_values = {
-	}
-	
-	render_template(self, 'index.html', template_values)
 
 class ReceiveMail(InboundMailHandler):
   def receive(self, message):
@@ -80,18 +74,7 @@ class ReceiveMail(InboundMailHandler):
 class Results(webapp2.RequestHandler):
   def get(self):
 	posters = ndb.gql('SELECT * FROM Poster ORDER BY count DESC LIMIT 10')
-	trends = ndb.gql('SELECT * FROM TopThree LIMIT 1')
-	
-	template_values = {
-		'posters' : posters,
-		'trends' : trends
-	}
-	
-	render_template(self, 'results.html', template_values)
-	
-  def post(self):
-	posters = ndb.gql('SELECT * FROM Poster ORDER BY count DESC LIMIT 10')
-	trends = ndb.gql('SELECT * FROM TopThree LIMIT 1')
+	trends = ndb.gql('SELECT * FROM TopThree').get()
 	
 	template_values = {
 		'posters' : posters,
@@ -102,17 +85,6 @@ class Results(webapp2.RequestHandler):
 	
 class StopVoting(webapp2.RequestHandler):
   def get(self):
-	ss_query = StartStop.query()
-	ssResult = ss_query.get()
-	if not ssResult:
-		ss = StartStop()
-		ss.startstop = False
-		ss.put()
-	else:
-		ssResult.startstop = False
-		ssResult.put()
-	
-  def post(self):
 	ss_query = StartStop.query()
 	ssResult = ss_query.get()
 	if not ssResult:
@@ -134,34 +106,18 @@ class StartVoting(webapp2.RequestHandler):
 	else:
 		ssResult.startstop = True
 		ssResult.put()
-	
-  def post(self):
-	ss_query = StartStop.query()
-	ssResult = ss_query.get()
-	if not ssResult:
-		ss = StartStop()
-		ss.startstop = True
-		ss.put()
-	else:
-		ssResult.startstop = True
-		ssResult.put()
 
 class ClearDB(webapp2.RequestHandler):
   def get(self):
 	posters = ndb.gql('SELECT * FROM Poster')
 	votes = ndb.gql('SELECT * FROM Vote')
+	topthree = ndb.gql('SELECT * FROM TopThree')
 	for p in posters:
 		p.key.delete()
 	for v in votes:
 		v.key.delete()
-	
-  def post(self):
-	posters = ndb.gql('SELECT * FROM Poster')
-	votes = ndb.gql('SELECT * FROM Vote')
-	for p in posters:
-		p.key.delete()
-	for v in votes:
-		v.key.delete()
+	for t in topthree:
+		t.key.delete()
 
 class AddPosters(webapp2.RequestHandler):		
   def get(self):
@@ -201,12 +157,15 @@ class GetTrends(webapp2.RequestHandler):
   def get(self):
 	currTime = datetime.datetime.now()
 	threeHours = currTime - datetime.timedelta(hours=3)
-
 	recVotes = ndb.gql('SELECT * FROM Vote WHERE time >= :1',threeHours)
 	
-	tags = []
+	recPost = []
 	for vote in recVotes:
-		for tag in vote.tag:
+		recPost.append(Poster.query(Poster.number == vote.posterNumber).get())
+		
+	tags = []
+	for rp in recPost:
+		for tag in rp.tags:
 			tags.append(tag)
 	
 	topThree = collections.Counter(tags).most_common(3)
@@ -219,60 +178,24 @@ class GetTrends(webapp2.RequestHandler):
 	tT_query = TopThree.query()
 	tTResult = tT_query.get()
 	if not tTResult:
-		tT = TopThree()
-		tT.one = three[0]
-		tT.two = three[1]
-		tT.three = three[2]
-		tT.onecount = cthree[0]
-		tT.twocount = cthree[1]
-		tT.threecount = cthree[2]
-		tT.put()
+		if three:
+			tT = TopThree()
+			tT.one = three[0]
+			tT.two = three[1]
+			tT.three = three[2]
+			tT.onecount = cthree[0]
+			tT.twocount = cthree[1]
+			tT.threecount = cthree[2]
+			tT.put()
 	else:
-		tTResult.one = three[0]
-		tTResult.two = three[1]
-		tTResult.three = three[2]
-		tTResult.onecount = cthree[0]
-		tTResult.twocount = cthree[1]
-		tTResult.threecount = cthree[2]
-		tTResult.put()
-	
-  def post(self):
-	currTime = datetime.datetime.now()
-	threeHours = currtime - datetime.timedelta(hours=3)
-
-	recVotes = ndb.gql('SELECT * FROM Vote WHERE time >= :1',threeHorus)
-	
-	tags = []
-	for vote in recVotes:
-		for tag in vote.tag:
-			tags.append(tag)
-	
-	topThree = collections.Counter(tags).most_common(3)
-	three = []
-	cthree = []
-	for top in topThree:
-		three.append(top[0])
-		cthree.append(top[1])
-		
-	tT_query = TopThree.query()
-	tTResult = tT_query.get()
-	if not tTResult:
-		tT = TopThree()
-		tT.one = three[0]
-		tT.two = three[1]
-		tT.three = three[2]
-		tT.onecount = cthree[0]
-		tT.twocount = cthree[1]
-		tT.threecount = cthree[2]
-		tT.put()
-	else:
-		tTResult.one = three[0]
-		tTResult.two = three[1]
-		tTResult.three = three[2]
-		tTResult.onecount = cthree[0]
-		tTResult.twocount = cthree[1]
-		tTResult.threecount = cthree[2]
-		tTResult.put()
+		if three:
+			tTResult.one = three[0]
+			tTResult.two = three[1]
+			tTResult.three = three[2]
+			tTResult.onecount = cthree[0]
+			tTResult.twocount = cthree[1]
+			tTResult.threecount = cthree[2]
+			tTResult.put()
 	
 app = webapp2.WSGIApplication([
   ('/', MainPage),
