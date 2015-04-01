@@ -1,0 +1,4 @@
+cron:
+- description: 10 second trends update
+  url: /getTrends
+  schedule: every monday 04:42

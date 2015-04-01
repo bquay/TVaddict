@@ -19,8 +19,17 @@ handlers:
   login: admin  
 - url: /startVoting
   script: pittdesignexpo.app
-  login: admin  
- 
+  login: admin
+- url: /clearDB
+  script: pittdesignexpo.app
+  login: admin
+- url: /addPosters
+  script: pittdesignexpo.app
+  login: admin
+- url: /getTrends
+  script: pittdesignexpo.app
+  login: admin
+  
 - url: /_ah/mail/.+
   script: pittdesignexpo.app
   login: admin  

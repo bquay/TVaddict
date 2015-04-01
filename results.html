@@ -34,6 +34,43 @@
 		{% else %}
 			<h1>There are no results, no one has voted yet!</h1>
 		{% endif %}
+		{% if trends %}
+			<h1>Trending Tags</h1>
+			<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px" >
+				<tr>	
+					<td>
+						Tag
+					</td>
+					<td>
+						# Votes
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{trends.one}}
+					</td>
+					<td>
+						{{trends.onecount}}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{trends.two}}
+					</td>
+					<td>
+						{{trends.twocount}}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{{trends.three}}
+					</td>
+					<td>
+						{{trends.threecount}}
+					</td>
+				</tr>
+			</table>
+		{% endif %}
 	</div>
 </body>
 </html>
