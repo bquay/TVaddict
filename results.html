@@ -36,36 +36,36 @@
 		{% endif %}
 		{% if trends %}
 			<h1>Trending Tags</h1>
-			<table style="width:50%" align="center" cellpadding="10px" cellspacing="5px" >
-				<tr>	
-					<td>
+			<table id="trendTable" style="width:50%" align="center" cellpadding="10px" cellspacing="5px" >
+				<tr id="rowLabel">	
+					<td id="tagLabel">
 						Tag
 					</td>
-					<td>
+					<td id="voteLabel">
 						# Votes
 					</td>
 				</tr>
-				<tr>
-					<td>
+				<tr id="row1">
+					<td id="trend1">
 						{{trends.one}}
 					</td>
-					<td>
+					<td id="count1">
 						{{trends.onecount}}
 					</td>
 				</tr>
-				<tr>
-					<td>
+				<tr id="row2">
+					<td id="trend2">
 						{{trends.two}}
 					</td>
-					<td>
+					<td id="count2">
 						{{trends.twocount}}
 					</td>
 				</tr>
-				<tr>
-					<td>
+				<tr id="row3">
+					<td id="trend3">
 						{{trends.three}}
 					</td>
-					<td>
+					<td id="count3">
 						{{trends.threecount}}
 					</td>
 				</tr>
