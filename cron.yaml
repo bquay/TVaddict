@@ -1,4 +1,4 @@
 cron:
 - description: every minute trends update
   url: /getTrends
-  schedule: every 1 mins from 21:30 to 23:30
+  schedule: every 1 mins from 21:00 to 23:30

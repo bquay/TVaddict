@@ -171,6 +171,12 @@ class AddPosters(webapp2.RequestHandler):
 	poster1.tags.append("software")
 	poster1.put()
   
+	template_values = {
+		"addPosters" : True,
+	}
+	
+	render_template(self, 'addPosters.html', template_values)
+  
 class GetTrends(webapp2.RequestHandler):
   def get(self):
 	currTime = datetime.datetime.now()
