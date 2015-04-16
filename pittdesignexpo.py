@@ -99,7 +99,7 @@ class StopVoting(webapp2.RequestHandler):
 		"stopVote" : True,
 	}
 	
-	render_template(self, 'stopVote.html', template_values)
+	render_template(self, 'stopVoting.html', template_values)
 	
 class StartVoting(webapp2.RequestHandler):
   def get(self):
@@ -117,7 +117,7 @@ class StartVoting(webapp2.RequestHandler):
 		"startVote" : True,
 	}
 	
-	render_template(self, 'startVote.html', template_values)
+	render_template(self, 'startVoting.html', template_values)
 
 class ClearDB(webapp2.RequestHandler):
   def get(self):
