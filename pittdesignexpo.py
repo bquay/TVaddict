@@ -94,6 +94,12 @@ class StopVoting(webapp2.RequestHandler):
 	else:
 		ssResult.startstop = False
 		ssResult.put()
+		
+	template_values = {
+		"stopVote" : True,
+	}
+	
+	render_template(self, 'stopVote.html', template_values)
 	
 class StartVoting(webapp2.RequestHandler):
   def get(self):
@@ -106,6 +112,12 @@ class StartVoting(webapp2.RequestHandler):
 	else:
 		ssResult.startstop = True
 		ssResult.put()
+		
+	template_values = {
+		"startVote" : True,
+	}
+	
+	render_template(self, 'startVote.html', template_values)
 
 class ClearDB(webapp2.RequestHandler):
   def get(self):
@@ -118,6 +130,12 @@ class ClearDB(webapp2.RequestHandler):
 		v.key.delete()
 	for t in topthree:
 		t.key.delete()
+		
+	template_values = {
+		"clearDB" : True,
+	}
+	
+	render_template(self, 'clearDB.html', template_values)
 
 class AddPosters(webapp2.RequestHandler):		
   def get(self):
